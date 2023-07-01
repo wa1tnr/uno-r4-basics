@@ -4,6 +4,10 @@
 
 // rp2040-wokwi-ser_interpret/interpreter-c/interpreter-c.ino
 
+// https://github.com/wa1tnr/rp2040-wokwi-ser_interpret/blob/main/interpreter-c/interpreter-c.ino
+// the interpreter-c.json there is equally suitable for a test on wokwi
+// however wokwi only has the old school Uno R3 ;)
+
 #include <unistd.h>
 
 #define lcl_printf() \
