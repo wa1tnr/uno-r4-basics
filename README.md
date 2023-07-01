@@ -9,5 +9,7 @@ it is expected to run well on the Uno R4 as well.
 
 RA4M1  R7FA4M1AB3CFM  64LFQFP  (guesswork/unconfirmed by physical inspection)
 
+  https://wokwi.com/projects/369048604979979265
+
 Sat  1 Jul 11:20:46 UTC 2023
 
