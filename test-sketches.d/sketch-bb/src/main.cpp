@@ -550,14 +550,15 @@ int test_program_a(void) {
 /* Arduino main loop */
 
 void setup() {
-  Serial.begin(9600);
-  while (!Serial);
+  Serial.begin(115200); // this
+  // while (!Serial);  not on uno r4 wifi as it has a bridge chip ESP32 iirc
   Serial.println ("Forth-like interpreter:");
-  words();
+  // words();
   Serial.println(" ");
   Serial.println("NOT_READY");
-  test_program_a();
+  // test_program_a();
   Serial.println("READY");
+  while(-1);
 }
 
 void loop() {
