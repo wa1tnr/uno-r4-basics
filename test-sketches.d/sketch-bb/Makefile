@@ -37,10 +37,10 @@ xxspiffs: erase
 
 # no spiffs upload before terminal launch:
 nsterm:
-	sleep 2; ./cf-fastpico9t /dev/ttyACM0
+	sleep 2; ./cf-fastpico9t-uno-r4 /dev/ttyACM0
 
 term:
-	sleep 2; ./cf-fastpico9t /dev/ttyACM0
+	sleep 2; ./cf-fastpico9t-uno-r4 /dev/ttyACM0
 
 upload:
 	pio run -t upload
