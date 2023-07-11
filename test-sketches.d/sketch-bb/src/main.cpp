@@ -1,4 +1,5 @@
 #include <Arduino.h>
+// working program - bare bones - Tue 11 Jul 17:33:04 UTC 2023
 
 // closest upstream work is probably:
 
@@ -550,9 +551,20 @@ int test_program_a(void) {
 /* Arduino main loop */
 
 void setup() {
+  /* functioning program Uno R4 WiFi 17:32 UTC 11 July 2023 */
+  /* basic printing works - press RESET after upload or add timing delays to see output */
   Serial.begin(115200); // this
+  delay(500);
   // while (!Serial);  not on uno r4 wifi as it has a bridge chip ESP32 iirc
+  Serial.println();
+  delay(500);
+  Serial.println();
+  delay(500);
+  Serial.println();
+  delay(500);
   Serial.println ("Forth-like interpreter:");
+  Serial.println();
+  Serial.println("dvlp-aa  5fa7402  Tue Jul 11 17:33:04 UTC 2023");
   // words();
   Serial.println(" ");
   Serial.println("NOT_READY");
