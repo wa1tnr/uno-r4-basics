@@ -1,0 +1,55 @@
+Uno R4 Minima, boot pin near IOREF strapped to ground, then USB-C plugged in:
+
+ $ dfu-util -l
+dfu-util 0.11
+
+Copyright 2005-2009 Weston Schmidt, Harald Welte and OpenMoko Inc.
+Copyright 2010-2021 Tormod Volden and Stefan Schmidt
+This program is Free Software and has ABSOLUTELY NO WARRANTY
+Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
+
+Found Runtime: [2341:0069] ver=0100, devnum=9, cfg=1, intf=2, path="1-9", alt=0, name="DFU-RT Port", serial="27849252711111222222344444555BC"
+ make $ 
+
+Here's 'dmesg -tw' concurrently (maybe; afterthought):
+
+usb 1-9: USB disconnect, device number 8
+usb 1-9: new full-speed USB device number 9 using xhci_hcd
+usb 1-9: New USB device found, idVendor=2341, idProduct=0069, bcdDevice= 1.00
+usb 1-9: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-9: Product: UNO R4 Minima
+usb 1-9: Manufacturer: Arduino
+usb 1-9: SerialNumber: 27849252711111222222344444555BC
+cdc_acm 1-9:1.0: ttyACM0: USB ACM device
+
+serial numbers changed - no correlation at all to original. ;)
+
+
+SAME BOARD, no boot wire strapped to ground:
+
+ $ sudo dmesg -tw output is:
+
+usb 1-9: new full-speed USB device number 10 using xhci_hcd
+usb 1-9: New USB device found, idVendor=2341, idProduct=0069, bcdDevice= 1.00
+usb 1-9: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-9: Product: UNO R4 Minima
+usb 1-9: Manufacturer: Arduino
+usb 1-9: SerialNumber: 27849252711111222222344444555BC
+cdc_acm 1-9:1.0: ttyACM0: USB ACM device
+
+here's dfu-util -l output:
+
+ $ dfu-util -l
+dfu-util 0.11
+
+Copyright 2005-2009 Weston Schmidt, Harald Welte and OpenMoko Inc.
+Copyright 2010-2021 Tormod Volden and Stefan Schmidt
+This program is Free Software and has ABSOLUTELY NO WARRANTY
+Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
+
+Found Runtime: [2341:0069] ver=0100, devnum=10, cfg=1, intf=2, path="1-9", alt=0, name="DFU-RT Port", serial="27849252711111222222344444555BC"
+
+This seems to say 'dfu-util shows '2341:0069' either strapped or not - confusing.
+
+Tue 11 Jul 23:52:08 UTC 2023
+END.
