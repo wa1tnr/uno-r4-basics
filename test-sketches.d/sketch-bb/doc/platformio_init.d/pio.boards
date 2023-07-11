@@ -1,0 +1,5 @@
+lists all boards known to platformio (non-experimental?)
+
+ $ pio boards
+
+Tue 11 Jul 15:57:44 UTC 2023

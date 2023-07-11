@@ -1,0 +1,8 @@
+Platform: renesas-ra
+================================================================================
+ID             MCU            Frequency    Flash    RAM       Name
+-------------  -------------  -----------  -------  --------  ---------------------
+portenta_c33   R7FA6M5BH2CBG  200MHz       2MB      511.35KB  Arduino Portenta C33
+uno_r4_minima  RA4M1          48MHz        256KB    32KB      Arduino Uno R4 Minima
+uno_r4_wifi    RA4M1          48MHz        256KB    32KB      Arduino Uno R4 WiFi
+

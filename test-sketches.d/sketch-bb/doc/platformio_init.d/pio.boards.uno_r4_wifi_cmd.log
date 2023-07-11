@@ -1,0 +1,4 @@
+$ pio boards | ag wifi | cat | ag uno | cat | ag -v 4809
+uno_r4_wifi    RA4M1          48MHz        256KB    32KB      Arduino Uno R4 WiFi
+
+Tue 11 Jul 15:54:53 UTC 2023
