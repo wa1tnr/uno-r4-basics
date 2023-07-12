@@ -17,8 +17,6 @@
       print_buffering();
 
 #define lcl_printf() \
-      buf_ptr = & buffering[0]; \
-      memcpy(buffering, &buffering[0], sizeof buffering); \
       print_buffering();
 
 /* test program includes */
@@ -456,34 +454,35 @@ void test_program_a(void) {
     buffer[0] = 'a';
     buffer[1] = 'b';
     buffer[2] = 'c';
-    buffer[3] = '\000';
+    buffer[3] = 'd';
+    buffer[4] = 'e';
+    buffer[5] = 'f';
+    buffer[6] = 'g';
+    buffer[7] = 'h';
+    buffer[8] = '\000';
 
     char* buffer_ptr = buffer;
-
     int buf_size = sizeof(buffer); // captures "abc\000" size
-
     int buf_ptr_size = sizeof(buffer_ptr);
-
     int buf_len = strlen(buffer);
 
     snprintf(buffering, sizeof(buffering), "%s%c", buffer, '\000');
     lcl_printf();
 
-// testors
-    snprintf(buffering, sizeof(buffering), "%s%c", " is the buffer contents\n\n", '\000');
+    snprintf(buffering, sizeof(buffering), "%s", " is the buffer contents\000");
     lcl_printf();
 
-    // gottem = write(1, buf_ptr, sizeof(buf_ptr));
+    snprintf(buffering, sizeof(buffering), "\n         sizeof(buf_ptr) is  %d\000", sizeof(buf_ptr));
+    lcl_printf();
+    newline();
+    newline();
 
-    // snprintf(buffer, sizeof(buffer), "\n         sizeof(buf_ptr) is  %d", sizeof(buf_ptr));
-    // memcpy dest source size:
-    // lcl_printf();
-/*
     buf_ptr = * & buffer; // way overdone - a test only.
-    memcpy (buffering, buf_ptr, sizeof buffer );
-    // printf(buf_ptr);
+    snprintf(buffering, sizeof(buffering), "%8X (%d)\000", buf_ptr, buf_ptr);
     lcl_printf();
-*/
+    newline();
+    newline();
+
 
     // snprintf(buffer, sizeof(buffer), "%s%c", "\n         sizeof(buffer)  is ", '\000');
 
@@ -582,7 +581,8 @@ void setup() {
   delay(500);
   Serial.println ("Forth-like interpreter:");
   Serial.println();
-  Serial.println("dvlp-aa  8ffb024  Wed Jul 12 00:11:02 UTC 2023");
+  Serial.println("dvlp-aa  6f39da7  Wed 12 Jul 05:17:18 UTC 2023");
+
   words();
   Serial.println(" ");
   // Serial.println("NOT_READY");
