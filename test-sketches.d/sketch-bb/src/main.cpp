@@ -11,12 +11,15 @@
 
 #include <unistd.h>
 
-// buf_ptr = * & buffer; \
+#define lcl_printf_NO() \
+      buf_ptr = & buffering[0]; \
+      memcpy(buffering, buf_ptr, sizeof buffering); \
+      print_buffering();
 
 #define lcl_printf() \
-      buf_ptr = & buffer[0]; \
-      memcpy(buffering, buf_ptr, sizeof buffer); \
-      print_buffer();
+      buf_ptr = & buffering[0]; \
+      memcpy(buffering, &buffering[0], sizeof buffering); \
+      print_buffering();
 
 /* test program includes */
 #include <stdio.h>
@@ -427,90 +430,94 @@ void runword() {
 // #include <stdint.h>
 // #include <string.h> // strlen only
 
-char buffering[64];
+char buffering[32];
+char* buf_ptr;
 
-void print_buffer(void) {
+void print_buffering(void) {
   Serial.print(buffering);
 }
 
 void space_it(void) {
-    sprintf(buffering, "%c", ' ');
-    // Serial.print(buffering);
-    print_buffer();
+    snprintf(buffering, sizeof(buffering), "%c", ' ');
+    lcl_printf();
 } // good 18:06 UTC 28 Dec 2021
 
 void newline(void) {
-    sprintf(buffering, "%c", '\n');
-    print_buffer();
+    snprintf(buffering, sizeof(buffering), "%c", '\n');
+    lcl_printf();
 }
 
-int test_program_a(void) {
+void test_program_a(void) {
     newline();
     space_it();
     
-    char buffer[64]; // 32 also 64
-    char* buf_ptr;
+    char buffer[32]; // 32 also 64
 
     buffer[0] = 'a';
     buffer[1] = 'b';
     buffer[2] = 'c';
     buffer[3] = '\000';
 
-    buf_ptr = buffer;
+    char* buffer_ptr = buffer;
 
-    int buf_size, buf_ptr_size;
+    int buf_size = sizeof(buffer); // captures "abc\000" size
 
-    buf_size = sizeof(buffer); // captures "abc\000" size
-    buf_ptr_size = sizeof(buf_ptr);
+    int buf_ptr_size = sizeof(buffer_ptr);
 
     int buf_len = strlen(buffer);
 
-    size_t gottem;
+    snprintf(buffering, sizeof(buffering), "%s%c", buffer, '\000');
+    lcl_printf();
 
-    sprintf(buffering, "%c", '\'');
-    print_buffer();
-
-    memcpy(buffering, buf_ptr, sizeof buffer);
-    print_buffer();
-
-
-    sprintf(buffering, "%c%c", '\'', ' ');
-    print_buffer();
-
-    sprintf(buffering, "%s ", " is the buffer contents");
-    print_buffer();
+// testors
+    snprintf(buffering, sizeof(buffering), "%s%c", " is the buffer contents\n\n", '\000');
+    lcl_printf();
 
     // gottem = write(1, buf_ptr, sizeof(buf_ptr));
 
-    sprintf(buf_ptr, "\n         sizeof(buf_ptr) is  %d", buf_ptr_size);
+    // snprintf(buffer, sizeof(buffer), "\n         sizeof(buf_ptr) is  %d", sizeof(buf_ptr));
     // memcpy dest source size:
-
-    lcl_printf();
+    // lcl_printf();
 /*
     buf_ptr = * & buffer; // way overdone - a test only.
     memcpy (buffering, buf_ptr, sizeof buffer );
     // printf(buf_ptr);
-    print_buffer();
+    lcl_printf();
 */
 
-    // sprintf(buf_ptr, "%s", "\n         sizeof(buffer)  is ", '\000');
+    // snprintf(buffer, sizeof(buffer), "%s%c", "\n         sizeof(buffer)  is ", '\000');
 
     // lcl_printf();
     /*
     buf_ptr = * & buffer;
     memcpy(buffering, buf_ptr, sizeof buffer);
-    print_buffer();
+    lcl_printf();
     */
 
     // extra copy:
-    // buf_size = sizeof(buffer[0]); // captures "abc\000" size
+    // buf_size = sizeof(buffer); // captures "abc\000" size
 
-    // snprintf(buf_ptr, buf_size, "%d%c%c", buf_size, '\n', '\000'); // related to string length, possibly
+
+// --------------------------  crashed --------------------------------
+// --------------------------  crashed --------------------------------
+// --------------------------  crashed --------------------------------
+// --------------------------  crashed --------------------------------
+    //   this crashes the machine .. why?
+
+    // snprintf(buffer, sizeof(buffer), "%d%c%c", buf_size, '\n', '\000'); // related to string length, possibly
+    // snprintf(buffer, sizeof(buffer), "%d%c", 27, '\000'); // related to string length, possibly
     // lcl_printf();
+// --------------------------  crashed --------------------------------
+// --------------------------  crashed --------------------------------
+// --------------------------  crashed --------------------------------
+// --------------------------  crashed --------------------------------
+// --------------------------  crashed --------------------------------
+
+    // here here
     // lcl_printf();
     /* buf_ptr = * & buffer;
     memcpy(buffering,buf_ptr, sizeof buffer);
-    print_buffer(); // 32
+    lcl_printf();
     */
     // printf(buf_ptr);
 
@@ -519,14 +526,14 @@ int test_program_a(void) {
     // lcl_printf();
     /* buf_ptr = * & buffer;
     memcpy(buffering, buf_ptr, sizeof buffer);
-    print_buffer();
+    lcl_printf();
     */
 
     // sprintf(buf_ptr, " %d\n", buf_len); // related to string length, possibly
     // lcl_printf();
     /* buf_ptr = * & buffer;
     memcpy(buffering, buf_ptr, sizeof buffer);
-    print_buffer();
+    lcl_printf();
     */
 
     // printf(buf_ptr);
@@ -539,7 +546,7 @@ int test_program_a(void) {
 
     /* buf_ptr = * & buffer;
     memcpy(buffering, buf_ptr, sizeof buffer);
-    print_buffer();
+    lcl_printf();
     */
     // print the buffer's address in ram
     // sprintf(buf_ptr, "0x%.8X\n", adrs);
@@ -547,7 +554,7 @@ int test_program_a(void) {
     /*
     buf_ptr = * & buffer;
     memcpy(buffering, buf_ptr, sizeof buffer);
-    print_buffer();
+    lcl_printf();
     */
     // printf(buf_ptr);
 
@@ -579,7 +586,7 @@ void setup() {
   words();
   Serial.println(" ");
   // Serial.println("NOT_READY");
-  // test_program_a();
+  test_program_a();
   // Serial.println("TRAPPED_READY");
   // while(-1);
   Serial.println("READY");
