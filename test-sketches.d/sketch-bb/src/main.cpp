@@ -374,6 +374,7 @@ void ok() {
 byte reading() {
   if (!Serial.available()) return 1;
   ch = Serial.read();
+  Serial.write(ch); // for current environment - SerialMonitor may double-print on this
   if (ch == '\r') return 1;
   if (ch == '\n') return 0;
   if (ch == ' ') {
@@ -393,8 +394,8 @@ void readword() {
   pos = 0;
   tib[0] = 0;
   while (reading());
-  Serial.print(tib);
-  Serial.print(" ");
+  // Serial.print(tib);
+  // Serial.print(" ");
 }
 
 /* Run a word via its name */
