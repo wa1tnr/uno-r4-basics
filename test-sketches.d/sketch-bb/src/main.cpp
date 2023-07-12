@@ -11,8 +11,10 @@
 
 #include <unistd.h>
 
+// buf_ptr = * & buffer; \
+
 #define lcl_printf() \
-      buf_ptr = * & buffer; \
+      buf_ptr = & buffer[0]; \
       memcpy(buffering, buf_ptr, sizeof buffer); \
       print_buffer();
 
@@ -337,9 +339,12 @@ void words() {
 
 /* Find a word in the dictionary, returning its position */
 int locate() {
-  for (int i = entries; i >= 0; i--) {
+  // for (int i = entries; i >= 0; i--) {
+  for (int i = (entries - 1); i >= 0; i--) {
     strcpy(namebuf, dictionary[i].name);
-    if (!strcmp(tib, namebuf)) return i;
+    if (!strcmp(tib, namebuf)) {
+        return i;
+    }
   }
   return 0;
 }
@@ -371,7 +376,9 @@ byte reading() {
   ch = Serial.read();
   if (ch == '\r') return 1;
   if (ch == '\n') return 0;
-  if (ch == ' ') return 0;
+  if (ch == ' ') {
+      return 0;
+  }
   if (pos < maxtib) {
     tib[pos++] = ch;
     tib[pos] = 0;
@@ -381,6 +388,7 @@ byte reading() {
 
 /* Block on reading the command line from serial port */
 /* then echo each word */
+
 void readword() {
   pos = 0;
   tib[0] = 0;
@@ -439,7 +447,7 @@ int test_program_a(void) {
     newline();
     space_it();
     
-    char buffer[48]; // 32 also 64
+    char buffer[64]; // 32 also 64
     char* buf_ptr;
 
     buffer[0] = 'a';
@@ -457,7 +465,6 @@ int test_program_a(void) {
     int buf_len = strlen(buffer);
 
     size_t gottem;
-
 
     sprintf(buffering, "%c", '\'');
     print_buffer();
@@ -485,9 +492,9 @@ int test_program_a(void) {
     print_buffer();
 */
 
-    sprintf(buf_ptr, "%s", "\n         sizeof(buffer)  is ");
+    // sprintf(buf_ptr, "%s", "\n         sizeof(buffer)  is ", '\000');
 
-    lcl_printf();
+    // lcl_printf();
     /*
     buf_ptr = * & buffer;
     memcpy(buffering, buf_ptr, sizeof buffer);
@@ -495,25 +502,27 @@ int test_program_a(void) {
     */
 
     // extra copy:
-    buf_size = sizeof(buffer); // captures "abc\000" size
+    // buf_size = sizeof(buffer[0]); // captures "abc\000" size
 
-    sprintf(buf_ptr, "%d\n", buf_size); // related to string length, possibly
-    lcl_printf();
+    // snprintf(buf_ptr, buf_size, "%d%c%c", buf_size, '\n', '\000'); // related to string length, possibly
+    // lcl_printf();
+    // lcl_printf();
     /* buf_ptr = * & buffer;
     memcpy(buffering,buf_ptr, sizeof buffer);
     print_buffer(); // 32
     */
     // printf(buf_ptr);
 
-    sprintf(buf_ptr, "%s", "         strlen(buffer)  is ");
-    lcl_printf();
+    // buf_ptr = buffer;
+    // snprintf(buf_ptr, sizeof(buf_ptr), "%s", "         strlen(buffer)  is ", '\000');
+    // lcl_printf();
     /* buf_ptr = * & buffer;
     memcpy(buffering, buf_ptr, sizeof buffer);
     print_buffer();
     */
 
-    sprintf(buf_ptr, " %d\n", buf_len); // related to string length, possibly
-    lcl_printf();
+    // sprintf(buf_ptr, " %d\n", buf_len); // related to string length, possibly
+    // lcl_printf();
     /* buf_ptr = * & buffer;
     memcpy(buffering, buf_ptr, sizeof buffer);
     print_buffer();
@@ -524,8 +533,9 @@ int test_program_a(void) {
     // uint16_t adrs;
     // adrs = (uint16_t) & buf_ptr;
 
-    sprintf(buf_ptr, "%s", "adrs (& buf_ptr) in hex is        ");
+    // sprintf(buf_ptr, "%s", "adrs (& buf_ptr) in hex is        ");
     // lcl_printf();
+
     /* buf_ptr = * & buffer;
     memcpy(buffering, buf_ptr, sizeof buffer);
     print_buffer();
@@ -541,8 +551,8 @@ int test_program_a(void) {
     // printf(buf_ptr);
 
 
-    sprintf(buf_ptr, "%s", "adrs (& buf_ptr) in decimal is  ");
-    lcl_printf();
+    // sprintf(buf_ptr, "%s", "adrs (& buf_ptr) in decimal is  ");
+    // lcl_printf();
 
     // sprintf(buf_ptr, "%c%.11u\n\n", ' ', adrs);
     // lcl_printf();
@@ -564,13 +574,14 @@ void setup() {
   delay(500);
   Serial.println ("Forth-like interpreter:");
   Serial.println();
-  Serial.println("dvlp-aa  5fa7402  Tue Jul 11 17:33:04 UTC 2023");
-  // words();
+  Serial.println("dvlp-aa  8ffb024  Wed Jul 12 00:11:02 UTC 2023");
+  words();
   Serial.println(" ");
-  Serial.println("NOT_READY");
+  // Serial.println("NOT_READY");
   // test_program_a();
+  // Serial.println("TRAPPED_READY");
+  // while(-1);
   Serial.println("READY");
-  while(-1);
 }
 
 void loop() {
