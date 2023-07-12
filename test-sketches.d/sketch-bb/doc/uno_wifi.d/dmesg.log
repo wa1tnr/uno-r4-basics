@@ -1,0 +1,8 @@
+usb 1-9: new full-speed USB device number 53 using xhci_hcd
+usb 1-9: New USB device found, idVendor=2341, idProduct=1002, bcdDevice= 1.00
+usb 1-9: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-9: Product: UNO WiFi R4 CMSIS-DAP
+usb 1-9: Manufacturer: Espressif Systems
+usb 1-9: SerialNumber: EA9248B7E227 (deliberately changed to a nonsense replacement for this file)
+hid-generic 0003:2341:1002.000E: hiddev3,hidraw5: USB HID v1.11 Device [Espressif Systems UNO WiFi R4 CMSIS-DAP] on usb-0000:00:14.0-9/input0
+cdc_acm 1-9:1.1: ttyACM0: USB ACM device
