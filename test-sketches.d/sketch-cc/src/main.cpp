@@ -1,4 +1,8 @@
 #include <Arduino.h>
+// charlieplexing sketch begins:
+// Sat 15 Jul 18:20:09 UTC 2023
+
+// old program was:
 // working program - bare bones - Tue 11 Jul 17:33:04 UTC 2023
 
 // closest upstream work is probably:
@@ -567,6 +571,8 @@ void test_program_a(void) {
 
 /* Arduino main loop */
 
+extern void test_me_cplx();
+
 void setup() {
   /* functioning program Uno R4 WiFi 17:32 UTC 11 July 2023 */
   /* basic printing works - press RESET after upload or add timing delays to see output */
@@ -587,6 +593,7 @@ void setup() {
   Serial.println(" ");
   // Serial.println("NOT_READY");
   test_program_a();
+  test_me_cplx();
   // Serial.println("TRAPPED_READY");
   // while(-1);
   Serial.println("READY");
