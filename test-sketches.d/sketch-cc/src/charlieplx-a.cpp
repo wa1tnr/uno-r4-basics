@@ -5,6 +5,8 @@
 
 // very early in development - expect nothing interesting .. yet.
 
+#define ESSENTIAL  0 // -1
+
 const int cplxPin[11] = {
     28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38
 //   0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10
@@ -56,30 +58,61 @@ const int ppedPin[11] = {
 
 #define COLUMNS_AA 4
 
+
 void print_pinmappings(int pin) {
-// void do_cool_stuff_aa(int pin) {
-    Serial.print(" pin: ");
-    Serial.print(pin);
-    Serial.print("  mapped: ");
-    Serial.print(cplxPin[pin]);
-    Serial.print("    ");
+
+    int* pinPtr = (int*) cplxPin[pin];
+    int thePin = (int) pinPtr;
+
+    if (!ESSENTIAL) {
+        Serial.print(" pin: ");
+        Serial.print(pin);
+    }
+
+    if (!ESSENTIAL) {
+        Serial.print("  mapped: ");
+        Serial.print(thePin, HEX);
+        Serial.print("    ");
+    }
+
     int remainder = (pin + 1) % COLUMNS_AA ;
-    bool flag;
-    if (remainder == 0) { flag = -1 ; }
-    if (flag) { Serial.println(); flag = 0; } // columnize
 
+    if (!ESSENTIAL) {
+        // Serial.println(" this is the columns part ");
+        Serial.print( " remainder: ");
+        Serial.println(remainder);
+        // Serial.print("  ");
+    }
 
-
+    if (!ESSENTIAL) {
+        bool flag = 0;
+        if (remainder == 0) {
+            flag = -1 ;
+        }
+        if (flag) {
+            Serial.println(); flag = 0;
+        } // columnize
+    }
 }
 
 void gpio_setup_cplx() {
-    int* pin_Ptr;
+    int* pinPtr;
     for (int pin = 0; pin < 11; pin++) {
-        int* pin_Ptr = (int*) cplxPin[pin];
-        int thePin = (int) pin_Ptr;
+
+        int* pinPtr = (int*) cplxPin[pin];
+        int thePin = (int) pinPtr;
+
+        if (!ESSENTIAL) {
+            Serial.print(" proprosed: ");
+            Serial.print(thePin);
+            Serial.print("  ");
+        }
+
         pinMode(thePin, OUTPUT); // charlieplexed so INPUT is also useful
-        digitalWrite(thePin, HIGH); // digitalWrite(cplxPin[pin_Ptr], LOW);
-        print_pinmappings(thePin); // print_pinmappings(pin_Ptr);
+        digitalWrite(thePin, HIGH); // digitalWrite(cplxPin[pinPtr], LOW);
+
+        print_pinmappings(pin); // print_pinmappings(pinPtr);
+
     }
     Serial.println();
     // Serial.print(" last pin in array is: ");
