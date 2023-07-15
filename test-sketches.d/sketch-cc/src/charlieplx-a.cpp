@@ -34,17 +34,17 @@ const int cplxPin[11] = {
 
 /*
 
-   P003  0
-   P004  1
-   P011  2
-   P012  3
-   P013  4
-   P015  5
-   P204  6
-   P205  7
-   P206  8
-   P212  9
-   P213 10
+   P003  0 28
+   P004  1 29
+   P011  2 30
+   P012  3 31
+   P013  4 32
+   P015  5 33
+   P204  6 34
+   P205  7 35
+   P206  8 36
+   P212  9 37
+   P213 10 38
 */
 
 const int ppedPin[11] = {
@@ -140,10 +140,6 @@ void set_as_input(int pin) {
     pinMode(cplxPin[pin], INPUT);
 }
 
-
-
-
-
 void set_as_output(int pin) {
 
     int outpin = cplxPin[pin];
@@ -169,6 +165,14 @@ void set_low(int pin) {
     digitalWrite(cplxPin[pin], LOW);
 }
 
+unsigned long int oldMicros = 0;
+bool enable_display = 0;
+
+// 800 to 100 good
+#define ON_TIME   800
+#define GAP_TIME  50
+#define OFF_TIME ON_TIME + GAP_TIME
+
 void do_a_thing() {
 /*
    in forth-like interpreter:
@@ -180,21 +184,30 @@ void do_a_thing() {
 
     set_all_cplx_inputs();
 
-    // pinMode(28, INPUT);
-    // pinMode(29, INPUT);
-    // pinMode(30, INPUT);
-    // pinMode(32, INPUT);
-    // pinMode(33, INPUT);
-    // pinMode(34, INPUT);
-    // pinMode(36, INPUT);
-    // pinMode(35, INPUT);
-    // pinMode(38, INPUT);
+    unsigned long currentMicros = micros();
+    unsigned long intervalAsFound = currentMicros - oldMicros;
 
-    pinMode(31, OUTPUT);
-    pinMode(37, OUTPUT);
+    if (intervalAsFound > ON_TIME) {
+        enable_display = -1;
+    }
 
-    digitalWrite(31, LOW);
-    digitalWrite(37, HIGH);
+    if (intervalAsFound > OFF_TIME) {
+        enable_display =  0;
+        oldMicros = currentMicros;
+    }
+
+    if (enable_display) {
+        pinMode(31, OUTPUT);
+        pinMode(37, OUTPUT);
+        digitalWrite(31, LOW);  // 3
+        digitalWrite(37, HIGH); // 9
+        return ;
+    }
+
+    if (!enable_display) {
+        pinMode(31, INPUT);
+        pinMode(37, INPUT);
+    }
 }
 
 /*
@@ -209,11 +222,12 @@ void test_me_cplx() {
     Serial.println();
     Serial.println(" light just one cplx LED - do not care which yet ");
     Serial.println();
-    Serial.println("   Sat 15 Jul 20:42:39 UTC 2023 charlieplexing cpp file ");
+    Serial.println("   Sat 15 Jul 23:33:16 UTC 2023 time-slicing LED array - charlie file ");
+
     Serial.println();
 
     gpio_setup_cplx();
-    do_a_thing(); // show what we can do now
+    // do_a_thing(); // show what we can do now
     Serial.println();
 }
 

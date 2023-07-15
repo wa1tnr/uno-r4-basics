@@ -375,8 +375,15 @@ void ok() {
   if (ch == '\n') Serial.println("ok");
 }
 
+extern void do_a_thing();
+
+void refresh_LED_array() {
+  do_a_thing();
+}
+
 /* Incrementally read command line from serial port */
 byte reading() {
+  refresh_LED_array();
   if (!Serial.available()) return 1;
   ch = Serial.read();
   Serial.write(ch); // for current environment - SerialMonitor may double-print on this
