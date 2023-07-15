@@ -5,6 +5,10 @@
 
 // very early in development - expect nothing interesting .. yet.
 
+const int cplxPin[11] = {
+    28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38
+//   0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10
+};
 
 /* variant.cpp says:
 
@@ -41,7 +45,7 @@
    P213 10
 */
 
-const int mappedPin[11] = {
+const int ppedPin[11] = {
     3, 4, 11, 12, 13, 15, 204, 205, 206, 212, 213 };
 
 //  0  1   2   3   4   5    6    7    8    9   10
@@ -50,28 +54,134 @@ const int mappedPin[11] = {
    pin: 2    mapped: 11     pin: 3    mapped: 12    
 */
 
-void gpio_setup_cplx() {
-    for (int pin = 0; pin < 4; pin++) {
-        Serial.print(" pin: ");
-        Serial.print(pin);
-        Serial.print("    mapped: ");
-        Serial.print(mappedPin[pin]);
-        Serial.print("    ");
-    }
-    Serial.println();
+#define COLUMNS_AA 4
+
+void print_pinmappings(int pin) {
+// void do_cool_stuff_aa(int pin) {
+    Serial.print(" pin: ");
+    Serial.print(pin);
+    Serial.print("  mapped: ");
+    Serial.print(cplxPin[pin]);
+    Serial.print("    ");
+    int remainder = (pin + 1) % COLUMNS_AA ;
+    bool flag;
+    if (remainder == 0) { flag = -1 ; }
+    if (flag) { Serial.println(); flag = 0; } // columnize
+
+
+
 }
 
-void setup_charlie() {
-    gpio_setup_cplx();
+void gpio_setup_cplx() {
+    int* pin_Ptr;
+    for (int pin = 0; pin < 11; pin++) {
+        int* pin_Ptr = (int*) cplxPin[pin];
+        int thePin = (int) pin_Ptr;
+        pinMode(thePin, OUTPUT); // charlieplexed so INPUT is also useful
+        digitalWrite(thePin, HIGH); // digitalWrite(cplxPin[pin_Ptr], LOW);
+        print_pinmappings(thePin); // print_pinmappings(pin_Ptr);
+    }
+    Serial.println();
+    // Serial.print(" last pin in array is: ");
+    // Serial.println(cplxPin[9]); // says 37 so it's cplxPin[10]
+    Serial.print(" last pin in array is: ");
+    Serial.println(cplxPin[10]);
 }
+
+
+void set_all_cplx_inputs() {
+    pinMode(28, INPUT);
+    pinMode(29, INPUT);
+    pinMode(30, INPUT);
+    pinMode(31, INPUT);
+    pinMode(32, INPUT);
+    pinMode(33, INPUT);
+    pinMode(34, INPUT);
+    pinMode(35, INPUT);
+    pinMode(36, INPUT);
+    pinMode(37, INPUT);
+    pinMode(38, INPUT);
+}
+
+void set_as_input(int pin) {
+    pinMode(cplxPin[pin], INPUT);
+}
+
+
+
+
+
+void set_as_output(int pin) {
+
+    int outpin = cplxPin[pin];
+
+    Serial.print(outpin);
+
+    if (outpin > 38) {
+        Serial.println("ERROR");
+        while(-1);
+    }
+
+    pinMode(outpin, OUTPUT);
+
+    Serial.println(" is set to OUTPUT");
+
+}
+
+void set_high(int pin) {
+    digitalWrite(cplxPin[pin], HIGH);
+}
+
+void set_low(int pin) {
+    digitalWrite(cplxPin[pin], LOW);
+}
+
+void do_a_thing() {
+/*
+   in forth-like interpreter:
+
+       28 input
+       31 output
+       37 output 37 high 31 low
+*/
+
+    set_all_cplx_inputs();
+
+    // pinMode(28, INPUT);
+    // pinMode(29, INPUT);
+    // pinMode(30, INPUT);
+    // pinMode(32, INPUT);
+    // pinMode(33, INPUT);
+    // pinMode(34, INPUT);
+    // pinMode(36, INPUT);
+    // pinMode(35, INPUT);
+    // pinMode(38, INPUT);
+
+    pinMode(31, OUTPUT);
+    pinMode(37, OUTPUT);
+
+    digitalWrite(31, LOW);
+    digitalWrite(37, HIGH);
+}
+
+/*
+28 input ok
+37 output ok
+31 output ok
+37 high LED lights
+*/
 
 void test_me_cplx() {
     Serial.println();
     Serial.println();
-    Serial.println(" test me in the new charlieplex cpp file ");
+    Serial.println(" light just one cplx LED - do not care which yet ");
     Serial.println();
-    Serial.println("   Sat 15 Jul 18:20:09 UTC 2023 charlieplexing cpp file ");
+    Serial.println("   Sat 15 Jul 20:42:39 UTC 2023 charlieplexing cpp file ");
     Serial.println();
+
     gpio_setup_cplx();
+    do_a_thing(); // show what we can do now
     Serial.println();
 }
+
+// END
