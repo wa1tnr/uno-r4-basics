@@ -166,7 +166,7 @@ void set_low(int pin) {
 }
 
 unsigned long int oldMicros = 0;
-bool enable_display = 0;
+// bool enable_display = 0;
 
 // 800 to 100 good
 #define ABS_MIN   38 // no lower than this
@@ -177,10 +177,33 @@ bool enable_display = 0;
 #define pGAP_TIME   26 // 26
 
 
-#define ON_TIME    200
-#define GAP_TIME   68 // 26
+#define ON_TIME    950
+#define GAP_TIME    32
 
 #define OFF_TIME ON_TIME + GAP_TIME
+
+bool eval_timeout() {
+
+    unsigned long currentMicros = micros();
+    unsigned long intervalAsFound = currentMicros - oldMicros;
+
+    if (intervalAsFound > OFF_TIME) {
+        // enable_display =  0;
+        oldMicros = currentMicros;
+        return -1;
+    }
+
+    // Serial.write(".");
+
+    if (intervalAsFound > ON_TIME) {
+        // enable_display = -1;
+        oldMicros = currentMicros;
+        return -0;
+    }
+
+    // Serial.println(" ERROR line 200 "); while(-1);
+
+}
 
 void do_a_thing() {
 /*
@@ -193,30 +216,21 @@ void do_a_thing() {
 
     set_all_cplx_inputs();
 
-    unsigned long currentMicros = micros();
-    unsigned long intervalAsFound = currentMicros - oldMicros;
-
-    if (intervalAsFound > ON_TIME) {
-        enable_display = -1;
-    }
-
-    if (intervalAsFound > OFF_TIME) {
-        enable_display =  0;
-        oldMicros = currentMicros;
-    }
+    bool enable_display = eval_timeout();
 
     if (enable_display) {
         pinMode(31, OUTPUT);
         pinMode(37, OUTPUT);
         digitalWrite(31, LOW);  // 3
         digitalWrite(37, HIGH); // 9
-        return ;
+        // return ;
     }
 
     if (!enable_display) {
         pinMode(31, INPUT);
         pinMode(37, INPUT);
     }
+
 }
 
 /*
