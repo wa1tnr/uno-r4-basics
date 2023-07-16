@@ -169,8 +169,17 @@ unsigned long int oldMicros = 0;
 bool enable_display = 0;
 
 // 800 to 100 good
-#define ON_TIME   800
-#define GAP_TIME  50
+#define ABS_MIN   38 // no lower than this
+#define xON_TIME   150 +         580
+#define xGAP_TIME  ABS_MIN + 4 +   -12
+
+#define pON_TIME   730
+#define pGAP_TIME   26 // 26
+
+
+#define ON_TIME    200
+#define GAP_TIME   68 // 26
+
 #define OFF_TIME ON_TIME + GAP_TIME
 
 void do_a_thing() {
