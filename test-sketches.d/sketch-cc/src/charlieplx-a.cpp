@@ -197,16 +197,27 @@ void Xunlight_l82() {
     pinMode(38, INPUT);
 }
 
-void show_l82() {
+void l82() {
     bool enable_display = eval_timeout();
-
-    if (!enable_display) {
-    }
-
     if (enable_display) {
-        light_l82();
-        vid_blank();
+        light_l82(); vid_blank();
     }
+}
+
+extern int pop();
+
+extern void dup();
+
+void l82d() { /* ( n -- ) */
+    vid_blank();
+    // dup(); pop();
+
+    for (int count = pop(); count > 0; count--) {
+        light_l82(); delayMicroseconds(33);
+        vid_blank(); delayMicroseconds(12000);
+    }
+    pop();
+    vid_blank();
 }
 
 /*
@@ -229,11 +240,10 @@ void Xunlight_l94() {
     pinMode(37, INPUT);
 }
 
-void show_l94() {
+void l94() {
     bool enable_display = eval_timeout();
 
     if (!enable_display) {
-        // unlight_l94();
     }
 
     if (enable_display) {
@@ -243,8 +253,8 @@ void show_l94() {
 }
 
 void do_a_thing() {
-    show_l82();
-    show_l94();
+    l82();
+    l94();
 }
 
 

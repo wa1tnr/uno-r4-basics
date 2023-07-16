@@ -284,6 +284,11 @@ void rdumps() {
 /* Beginning of application words */
 
 
+NAMED(_vid_blank, "bl");
+extern void vid_blank();
+
+NAMED(_l82d, "l82");
+extern void l82d();
 
 
 /* End of application words */
@@ -302,6 +307,8 @@ void words();
 const entry dictionary[] = {
   {_nop, nop},
   {_words, words},
+  {_l82d, l82d},
+  {_vid_blank, vid_blank},
   {_dup, dup},
   {_drop, drop},
   {_back, back},
@@ -383,7 +390,9 @@ void refresh_LED_array() {
 
 /* Incrementally read command line from serial port */
 byte reading() {
+#ifdef DYNAMIC
   refresh_LED_array();
+#endif
   if (!Serial.available()) return 1;
   ch = Serial.read();
   Serial.write(ch); // for current environment - SerialMonitor may double-print on this
