@@ -108,7 +108,7 @@ void gpio_setup_cplx() {
             Serial.print("  ");
         }
 
-        pinMode(thePin, OUTPUT); // charlieplexed so INPUT is also useful
+        pinMode(thePin, OUTPUT);
         digitalWrite(thePin, HIGH); // digitalWrite(cplxPin[pinPtr], LOW);
 
         print_pinmappings(pin); // print_pinmappings(pinPtr);
@@ -209,24 +209,55 @@ bool eval_timeout() {
        37 output 37 high 31 low
 */
 
-void do_a_thing() {
-    set_all_cplx_inputs();
 
+void light_l94() {
+    pinMode(31, OUTPUT);
+    pinMode(37, OUTPUT);
+    digitalWrite(31, LOW);  // 3
+    digitalWrite(37, HIGH); // 9
+}
+
+void unlight_l94() {
+    pinMode(31, INPUT);
+    pinMode(37, INPUT);
+}
+
+void vid_blank() {
+    set_all_cplx_inputs();
+}
+
+
+
+void show_l94() {
+    vid_blank();
     bool enable_display = eval_timeout();
 
     if (!enable_display) {
-        pinMode(31, INPUT);
-        pinMode(37, INPUT);
+        unlight_l94();
     }
 
     if (enable_display) {
-        pinMode(31, OUTPUT);
-        pinMode(37, OUTPUT);
-        digitalWrite(31, LOW);  // 3
-        digitalWrite(37, HIGH); // 9
+        light_l94();
     }
-    // Serial.write('E');
 }
+
+void do_a_thing() {
+    show_l94();
+}
+
+        // pinMode(38, OUTPUT);
+        // digitalWrite(38, HIGH); // 10
+    // Serial.write('E');
+
+
+/*
+const int ref = 0;
+const int xcplxPin[22] = {
+    28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+     0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10
+};
+*/
+
 
 /*
 28 input ok
@@ -235,12 +266,13 @@ void do_a_thing() {
 37 high LED lights
 */
 
+#define TIMESTAMP "Sun 16 Jul 02:41:31 UTC 2023"
 void test_me_cplx() {
     Serial.println();
     Serial.println();
     Serial.println(" light just one cplx LED - do not care which yet ");
     Serial.println();
-    Serial.println("   Sun 16 Jul 02:05:31 UTC 2023 time-slicing LED array - charlie file ");
+    Serial.println("   " TIMESTAMP  "  time-slicing LED array - charlie file ");
 
     Serial.println();
 
