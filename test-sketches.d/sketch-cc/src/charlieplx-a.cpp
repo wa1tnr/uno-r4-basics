@@ -165,33 +165,11 @@ void set_low(int pin) {
     digitalWrite(cplxPin[pin], LOW);
 }
 
-unsigned long currentMicros = micros();
 unsigned long int oldMicros = micros();
 
-// bool enable_display = 0;
-
-// 800 to 100 good
-#define ABS_MIN   38 // no lower than this
-#define xON_TIME   150 +         580
-#define xGAP_TIME  ABS_MIN + 4 +   -12
-
-#define pON_TIME   730
-#define pGAP_TIME   26 // 26
-
-
-#define jON_TIME    950
-#define jGAP_TIME    32
-
-
-#define ON_TIME    4000
-#define GAP_TIME   4000
-
-#define TIMEOUT    14333
-
-#define OFF_TIME ON_TIME + GAP_TIME
+#define TIMEOUT    933
 
 bool eval_timeout() {
-
     unsigned long currentMicros = micros();
     unsigned long intervalAsFound = currentMicros - oldMicros;
 
@@ -200,6 +178,35 @@ bool eval_timeout() {
         return  -1;
     }
     return 0;
+}
+
+void vid_blank() {
+    set_all_cplx_inputs();
+    oldMicros = micros();
+}
+
+void light_l82() {
+    pinMode(38, OUTPUT);
+    pinMode(28, OUTPUT);
+    digitalWrite(38, HIGH); // 10
+    digitalWrite(28, LOW);  //  0
+}
+
+void Xunlight_l82() {
+    pinMode(28, INPUT);
+    pinMode(38, INPUT);
+}
+
+void show_l82() {
+    bool enable_display = eval_timeout();
+
+    if (!enable_display) {
+    }
+
+    if (enable_display) {
+        light_l82();
+        vid_blank();
+    }
 }
 
 /*
@@ -217,37 +224,28 @@ void light_l94() {
     digitalWrite(37, HIGH); // 9
 }
 
-void unlight_l94() {
+void Xunlight_l94() {
     pinMode(31, INPUT);
     pinMode(37, INPUT);
 }
 
-void vid_blank() {
-    set_all_cplx_inputs();
-}
-
-
-
 void show_l94() {
-    vid_blank();
     bool enable_display = eval_timeout();
 
     if (!enable_display) {
-        unlight_l94();
+        // unlight_l94();
     }
 
     if (enable_display) {
         light_l94();
+        vid_blank();
     }
 }
 
 void do_a_thing() {
+    show_l82();
     show_l94();
 }
-
-        // pinMode(38, OUTPUT);
-        // digitalWrite(38, HIGH); // 10
-    // Serial.write('E');
 
 
 /*
@@ -266,11 +264,11 @@ const int xcplxPin[22] = {
 37 high LED lights
 */
 
-#define TIMESTAMP "Sun 16 Jul 02:41:31 UTC 2023"
+#define TIMESTAMP "GOT IT: Sun 16 Jul 04:08:12 UTC 2023"
 void test_me_cplx() {
     Serial.println();
     Serial.println();
-    Serial.println(" light just one cplx LED - do not care which yet ");
+    Serial.println(" light individual LEDs one after another with video blanking - GOT IT");
     Serial.println();
     Serial.println("   " TIMESTAMP  "  time-slicing LED array - charlie file ");
 
