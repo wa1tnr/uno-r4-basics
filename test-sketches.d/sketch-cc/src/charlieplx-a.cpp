@@ -165,7 +165,9 @@ void set_low(int pin) {
     digitalWrite(cplxPin[pin], LOW);
 }
 
-unsigned long int oldMicros = 0;
+unsigned long currentMicros = micros();
+unsigned long int oldMicros = micros();
+
 // bool enable_display = 0;
 
 // 800 to 100 good
@@ -177,8 +179,14 @@ unsigned long int oldMicros = 0;
 #define pGAP_TIME   26 // 26
 
 
-#define ON_TIME    950
-#define GAP_TIME    32
+#define jON_TIME    950
+#define jGAP_TIME    32
+
+
+#define ON_TIME    4000
+#define GAP_TIME   4000
+
+#define TIMEOUT    14333
 
 #define OFF_TIME ON_TIME + GAP_TIME
 
@@ -187,50 +195,37 @@ bool eval_timeout() {
     unsigned long currentMicros = micros();
     unsigned long intervalAsFound = currentMicros - oldMicros;
 
-    if (intervalAsFound > OFF_TIME) {
-        // enable_display =  0;
+    if (intervalAsFound > TIMEOUT) {
         oldMicros = currentMicros;
-        return -1;
+        return  -1;
     }
-
-    // Serial.write(".");
-
-    if (intervalAsFound > ON_TIME) {
-        // enable_display = -1;
-        oldMicros = currentMicros;
-        return -0;
-    }
-
-    // Serial.println(" ERROR line 200 "); while(-1);
-
+    return 0;
 }
 
-void do_a_thing() {
 /*
    in forth-like interpreter:
-
        28 input
        31 output
        37 output 37 high 31 low
 */
 
+void do_a_thing() {
     set_all_cplx_inputs();
 
     bool enable_display = eval_timeout();
-
-    if (enable_display) {
-        pinMode(31, OUTPUT);
-        pinMode(37, OUTPUT);
-        digitalWrite(31, LOW);  // 3
-        digitalWrite(37, HIGH); // 9
-        // return ;
-    }
 
     if (!enable_display) {
         pinMode(31, INPUT);
         pinMode(37, INPUT);
     }
 
+    if (enable_display) {
+        pinMode(31, OUTPUT);
+        pinMode(37, OUTPUT);
+        digitalWrite(31, LOW);  // 3
+        digitalWrite(37, HIGH); // 9
+    }
+    // Serial.write('E');
 }
 
 /*
@@ -245,7 +240,7 @@ void test_me_cplx() {
     Serial.println();
     Serial.println(" light just one cplx LED - do not care which yet ");
     Serial.println();
-    Serial.println("   Sat 15 Jul 23:33:16 UTC 2023 time-slicing LED array - charlie file ");
+    Serial.println("   Sun 16 Jul 02:05:31 UTC 2023 time-slicing LED array - charlie file ");
 
     Serial.println();
 
