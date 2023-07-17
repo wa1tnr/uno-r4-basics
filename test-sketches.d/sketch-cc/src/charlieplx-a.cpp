@@ -315,6 +315,10 @@ const int xcplxPin[22] = {
 
 #define TIMESTAMP "Mon 17 Jul 03:08:14 UTC 2023"
 
+void report_findings_test_timings() {
+    Serial.println("SKELETON: report findings: the 'res' word.");
+}
+
 void test_me_cplx() {
   Serial.println();
   Serial.println();

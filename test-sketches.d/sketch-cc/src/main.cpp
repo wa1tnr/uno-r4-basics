@@ -303,6 +303,8 @@ extern void acld(); // arra clr bit dynamic
 NAMED(_parr, "parr");
 extern void post_arrayd(); // not sure what this will be doing yet
 
+NAMED(_find_times, "res"); // results of timings
+extern void report_findings_test_timings();
 
 /* End of application words */
 /* ******************************************** */
@@ -326,6 +328,7 @@ const entry dictionary[] = {
   {_asb, asbd},
   {_aclb, acld},
   {_parr, post_arrayd},
+  {_find_times, report_findings_test_timings}, // res word
   {_dup, dup},
   {_drop, drop},
   {_back, back},
