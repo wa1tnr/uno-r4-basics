@@ -119,7 +119,11 @@ void gpio_setup_cplx() {
 
 unsigned long int test_counter_iterations[11];
 
-void init_counter_array() { test_counter_iterations[0] = 0; }
+void clear_counter_array() {
+    for (int pos = 0; pos < 11; pos++) {
+        test_counter_iterations[pos] = 0;
+    }
+}
 
 bool timeout_little = 0;
 
@@ -261,8 +265,12 @@ void vid_blank() {
 }
 
 // depends: eval_timeout, show_Array, vid_blank
+
+unsigned long master_counter = 0;
+
 void write_Array() { // in 'reading' not called even one time in this .cpp file
                      // - see main.cpp
+    master_counter++;
     bool enable_display = eval_timeout();
     if (enable_display) {
         show_Array();
@@ -276,25 +284,33 @@ void write_to_Array(uint8_t pos, uint8_t got) {
     pinArray[pos] = got;
 } // got can be 0 1 or 2 for tri-stating
 
-void clear_display() {
+void clear_display_data() {
+    clear_counter_array(); // clear their respective counters as well
     for (uint8_t pos = 0; pos < 11; pos++) {
         write_to_Array(pos, 0); // set to INPUT
     }
 }
 
+void clear_things() {
+    master_counter = 0;
+    set_all_cplx_inputs();
+    clear_counter_array();
+}
+
 void acld() {
     int p = pop();
     uint8_t pos = (uint8_t)p;
-    set_all_cplx_inputs();
     write_to_Array(pos, (uint8_t)1);
+    clear_things(); // acld and asbd are single-shot; this initializes metrics
+                    // for measurement
 } /* ( n -- ) array clr bit dynamic */
 
 // setb
 void asbd() {
     int p = pop();
     uint8_t pos = (uint8_t)p;
-    set_all_cplx_inputs();
     write_to_Array(pos, (uint8_t)2);
+    clear_things();
 } /* ( n -- ) array clr bit dynamic */
 
 void post_arrayd() {
@@ -307,8 +323,6 @@ void post_arrayd() {
 extern void push(int n);
 
 void l82d() { /* ( n -- ) */
-    set_all_cplx_inputs();
-    clear_display();
     push(0);
     acld();
     push(10);
@@ -348,14 +362,42 @@ const int xcplxPin[22] = {
 #define TIMESTAMP "Mon 17 Jul 03:08:14 UTC 2023"
 
 void report_findings_test_timings() {
-    Serial.println("SKELETON: report findings: the 'res' word.");
+    Serial.println("report findings: the 'res' word.");
+
+    Serial.print("\n master counter: ");
+    Serial.println(master_counter);
 
     for (int pos = 0; pos < 11; pos++) {
 
+        // reference only: unsigned long master_counter = 0;
         unsigned long output = test_counter_iterations[pos];
+
+        float test_float = 22 / 7;
 
         Serial.print(" counter: ");
         Serial.print(output);
+
+        Serial.print(" ratio: ");
+
+        char buffer[64];
+        buffer[0] = '\000';
+
+        // width . precision length conversion
+
+        // snprintf(buffer, 63, "%8.8f%c", test_float, '\000');
+
+        // snprintf(buffer, sizeof(buffer), "abcdefg  \n", '\000');
+        // Serial.print(buffer);
+
+        // float ratio = (float) master_counter / (float) output;
+
+        // snprintf(buffer, sizeof(buffer), "%.4f\n%c", test_ratio, '\000');
+        float calculation = master_counter / 0.9999999999;
+        float ratio = output / calculation;
+        float r_ratio = 1 / ratio;
+        // snprintf(buffer, sizeof(buffer), "abc%15.5f%c", calculation, '\000');
+        Serial.print(r_ratio);
+
         Serial.println();
     }
 
@@ -363,7 +405,7 @@ void report_findings_test_timings() {
 }
 
 void test_me_cplx() {
-    init_counter_array(); // scaffolding/testing only
+    clear_counter_array();
 
     Serial.println();
     Serial.println();
