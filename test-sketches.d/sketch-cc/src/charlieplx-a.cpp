@@ -151,7 +151,10 @@ unsigned long int oldMicros = micros();
 
 // #define TIMEOUT    933
 
-#define TIMEOUT    933
+// #define TIMEOUT    933
+unsigned long int TIMEOUT = 9933;
+// #define TIMEOUT    433
+// #define TIMEOUT    233
 
 bool eval_timeout() {
     unsigned long currentMicros = micros();
@@ -166,7 +169,7 @@ bool eval_timeout() {
 
 void vid_blank() {
     set_all_cplx_inputs();
-    oldMicros = micros();
+    // oldMicros = micros();
 }
 
 extern int pop();
@@ -251,6 +254,7 @@ extern void push(int n);
 
 void l82d() { /* ( n -- ) */
     set_all_cplx_inputs();
+    clear_display();
     push(0);  acld();
     push(10); asbd();
 }

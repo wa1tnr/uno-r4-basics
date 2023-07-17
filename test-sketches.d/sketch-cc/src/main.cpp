@@ -287,6 +287,9 @@ void rdumps() {
 NAMED(_vid_blank, "bl");
 extern void vid_blank();
 
+NAMED(_cls, "cls");
+extern void clear_display();
+
 NAMED(_l82d, "l82");
 extern void l82d();
 
@@ -319,6 +322,7 @@ const entry dictionary[] = {
   {_words, words},
   {_l82d, l82d},
   {_vid_blank, vid_blank},
+  {_cls, clear_display}, // zero all elements in parr array
   {_asb, asbd},
   {_aclb, acld},
   {_parr, post_arrayd},
