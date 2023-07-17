@@ -140,10 +140,6 @@ void set_all_cplx_inputs() {
     pinMode(38, INPUT);
 }
 
-// void set_as_input(int pin) { }
-
-// void set_as_output(int pin) { }
-
 void set_high(int pin) {
     digitalWrite(cplxPin[pin], HIGH);
 }
@@ -155,7 +151,8 @@ void set_low(int pin) {
 unsigned long int oldMicros = micros();
 
 // #define TIMEOUT    933
-#define TIMEOUT    333
+
+#define TIMEOUT    933
 
 bool eval_timeout() {
     unsigned long currentMicros = micros();
@@ -174,7 +171,6 @@ void vid_blank() {
 }
 
 extern int pop();
-
 extern void dup();
 
 /*
@@ -186,49 +182,12 @@ extern void dup();
 
 uint16_t c_array = 0; // no bits set
 
-/*  setting it up this way (see below) allows things,
-    since it compiles clean without any comment mark-up.
-
-    In particular #ifdef 0  .. #endif  vs  slash star comment star slash foo
-
-    One of them does not really permit/allow/like bad code inside as a container
-
-    But clean code that is obviously not for a real program is okay.
-
-    Pretty sure that slash star any text star slash is the one that is safer,
-    but has the disadvantage of a loss of syntax highlighting, in rvim.
-
-    So, #ifdef is preferred, but more restrictive what can be in it.
-*/
-
-/*
-char myJunkStr[] = " " \
-    "  $  gforth"                                    \
-                                                     \
-    " decimal 28 hex . decimal 38 hex . 1C 26  ok"   \
-    " decimal 28 2 base ! . decimal 11100  ok"       \
-    " decimal 38 2 base ! . decimal 100110  ok"      ;
-*/
-
-/*
-
-   32:   100000
-         100000   and:
-         100000   that's why.
-         111111   0x3F
-
-         hex 20 negate 1 + negate bina   . 11111  ok
-         hex 1F                   bina   . 11111  ok
-
-*/
-
 void print_c_array() {
     int p =  c_array; // normalize
     Serial.print("    c_array: ");
     Serial.print(p);
     Serial.print("   ");
 }
-
 
 void write_pos(uint8_t pos, uint8_t got) {
     pos = pos + 28;
@@ -245,22 +204,29 @@ void show_Array() {
     }
 }
 
+void write_to_Array(uint8_t pos, uint8_t got) {
+    pinArray[pos] = got;
+}
+
+void clear_display() {
+    for (uint8_t pos = 0; pos < 11; pos++) {
+        // int got = pinArray[pos];
+        write_to_Array(pos, 0);
+    }
+}
+
 void write_Array() { // in 'reading'
     bool enable_display = eval_timeout();
     if (enable_display) {
         show_Array();
-        // vid_blank();
     }
     vid_blank(); // best spot for the effect
-}
-
-void write_to_Array(uint8_t pos, uint8_t got) {
-    pinArray[pos] = got;
 }
 
 void acld() {
     int p = pop();
     uint8_t pos = (uint8_t) p;
+    set_all_cplx_inputs();
     write_to_Array(pos, (uint8_t) 1);
 } /* ( n -- ) array clr bit dynamic */
 
@@ -268,6 +234,7 @@ void acld() {
 void asbd() {
     int p = pop();
     uint8_t pos = (uint8_t) p;
+    set_all_cplx_inputs();
     write_to_Array(pos, (uint8_t) 2);
 } /* ( n -- ) array clr bit dynamic */
 
@@ -280,32 +247,10 @@ void post_arrayd() {
 
 extern void push(int n);
 
-void light_l82() {
-    // pinMode(38, OUTPUT);
-    // pinMode(28, OUTPUT);
-    push( // 38 - 28
-          10); asbd();
-    push( // 29 - 28
-           1); acld();
-    // digitalWrite(38, HIGH); // 10
-    // digitalWrite(28, LOW);  //  0
-}
-
-void l82() {
-    light_l82();
-}
-
 void l82d() { /* ( n -- ) */
-    light_l82();
-    // vid_blank();
-    // dup(); pop();
-
-    // for (int count = pop(); count > 0; count--) {
-        // light_l82(); delayMicroseconds(33);
-        // vid_blank(); delayMicroseconds(12000);
-    // }
-    // pop();
-    // vid_blank();
+    set_all_cplx_inputs();
+    push(0);  acld();
+    push(10); asbd();
 }
 
 void light_l94() {
@@ -322,12 +267,6 @@ void l94() {
         vid_blank();
     }
 }
-
-void do_a_thing() {
-    l82();
-    l94();
-}
-
 
 /*
 const int ref = 0;
