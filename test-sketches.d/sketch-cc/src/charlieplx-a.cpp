@@ -154,7 +154,8 @@ void set_low(int pin) {
 
 unsigned long int oldMicros = micros();
 
-#define TIMEOUT    933
+// #define TIMEOUT    933
+#define TIMEOUT    333
 
 bool eval_timeout() {
     unsigned long currentMicros = micros();
@@ -172,37 +173,9 @@ void vid_blank() {
     oldMicros = micros();
 }
 
-void light_l82() {
-    pinMode(38, OUTPUT);
-    pinMode(28, OUTPUT);
-    digitalWrite(38, HIGH); // 10
-    digitalWrite(28, LOW);  //  0
-}
-
-// void Xunlight_l82() { }
-
-void l82() {
-    bool enable_display = eval_timeout();
-    if (enable_display) {
-        light_l82(); vid_blank();
-    }
-}
-
 extern int pop();
 
 extern void dup();
-
-void l82d() { /* ( n -- ) */
-    vid_blank();
-    // dup(); pop();
-
-    for (int count = pop(); count > 0; count--) {
-        light_l82(); delayMicroseconds(33);
-        vid_blank(); delayMicroseconds(12000);
-    }
-    pop();
-    vid_blank();
-}
 
 /*
    in forth-like interpreter:
@@ -211,31 +184,7 @@ void l82d() { /* ( n -- ) */
        37 output 37 high 31 low
 */
 
-
-void light_l94() {
-    pinMode(31, OUTPUT);
-    pinMode(37, OUTPUT);
-    digitalWrite(31, LOW);  // 3
-    digitalWrite(37, HIGH); // 9
-}
-
-// void Xunlight_l94() { }
-
-void l94() {
-    bool enable_display = eval_timeout();
-
-    if (!enable_display) {
-    }
-
-    if (enable_display) {
-        light_l94();
-        vid_blank();
-    }
-}
-
 uint16_t c_array = 0; // no bits set
-
-
 
 /*  setting it up this way (see below) allows things,
     since it compiles clean without any comment mark-up.
@@ -299,10 +248,10 @@ void show_Array() {
 void write_Array() { // in 'reading'
     bool enable_display = eval_timeout();
     if (enable_display) {
-        vid_blank();
         show_Array();
-        while(eval_timeout());
+        // vid_blank();
     }
+    vid_blank(); // best spot for the effect
 }
 
 void write_to_Array(uint8_t pos, uint8_t got) {
@@ -329,6 +278,51 @@ void post_arrayd() {
     Serial.println();
 }
 
+extern void push(int n);
+
+void light_l82() {
+    // pinMode(38, OUTPUT);
+    // pinMode(28, OUTPUT);
+    push( // 38 - 28
+          10); asbd();
+    push( // 29 - 28
+           1); acld();
+    // digitalWrite(38, HIGH); // 10
+    // digitalWrite(28, LOW);  //  0
+}
+
+void l82() {
+    light_l82();
+}
+
+void l82d() { /* ( n -- ) */
+    light_l82();
+    // vid_blank();
+    // dup(); pop();
+
+    // for (int count = pop(); count > 0; count--) {
+        // light_l82(); delayMicroseconds(33);
+        // vid_blank(); delayMicroseconds(12000);
+    // }
+    // pop();
+    // vid_blank();
+}
+
+void light_l94() {
+    pinMode(31, OUTPUT);
+    pinMode(37, OUTPUT);
+    digitalWrite(31, LOW);  // 3
+    digitalWrite(37, HIGH); // 9
+}
+
+void l94() {
+    bool enable_display = eval_timeout();
+    if (enable_display) {
+        light_l94();
+        vid_blank();
+    }
+}
+
 void do_a_thing() {
     l82();
     l94();
@@ -351,11 +345,12 @@ const int xcplxPin[22] = {
 37 high LED lights
 */
 
-#define TIMESTAMP "GOT IT: Sun 16 Jul 04:08:12 UTC 2023"
+#define TIMESTAMP "Mon 17 Jul 03:08:14 UTC 2023"
+
 void test_me_cplx() {
     Serial.println();
     Serial.println();
-    Serial.println(" light individual LEDs one after another with video blanking - GOT IT");
+    Serial.println(" ex. 0 asb 1 acl parr   use 0-10 as TOS for asb or acl");
     Serial.println();
     Serial.println("   " TIMESTAMP  "  time-slicing LED array - charlie file ");
 
