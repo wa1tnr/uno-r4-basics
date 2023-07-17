@@ -125,6 +125,20 @@ void gpio_setup_cplx() {
     Serial.println(cplxPin[10]);
 }
 
+unsigned long int test_counter_iterations = 0;
+
+void increment_test_counter() {
+    test_counter_iterations++;
+    int seconds = 8;
+    unsigned long int goal = ((377 * seconds) / 3) ; //  377 iterations * 8 seconds desired qty / 3 gives wall clock seconds
+    if (test_counter_iterations == goal) {
+        Serial.print("TEST GOAL reached at: ");
+        Serial.println(goal);
+        Serial.println("\n\n   TERMINAL VELOCITY! okay that's not remotely factual, but..  HOLDING FOREVER HERE.");
+        while(-1);
+    }
+}
+
 void set_all_cplx_inputs() {
     pinMode(28, INPUT);
     pinMode(29, INPUT);
@@ -199,7 +213,14 @@ void write_pos(uint8_t pos, uint8_t got) {
         return;
     }
     got = got - 1;  pinMode(pos, OUTPUT); digitalWrite(pos, got);
+
+    // TIME ASSESSMENT ONLY:       repeat all lc: time assessment only
+    if (pos == 0 + 28) { // only triggers when a pixel is lit as the early return masks program flow to this juncture.
+        increment_test_counter();
+    }
+
 }
+
 
 void show_Array() {
     for (uint8_t pos = 0; pos < 11; pos++) {
