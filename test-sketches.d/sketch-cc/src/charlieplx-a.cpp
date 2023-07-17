@@ -125,7 +125,6 @@ void gpio_setup_cplx() {
     Serial.println(cplxPin[10]);
 }
 
-
 void set_all_cplx_inputs() {
     pinMode(28, INPUT);
     pinMode(29, INPUT);
@@ -191,10 +190,12 @@ void print_c_array() {
 
 void write_pos(uint8_t pos, uint8_t got) {
     pos = pos + 28;
-    if (got == 1) { pinMode(pos, OUTPUT); }
-    if (got == 2) { pinMode(pos, OUTPUT); }
-    if (got == 1 || got == 2) { got = got - 1;  digitalWrite(pos, got); return; }
-    pinMode(pos, INPUT); // finally tri-stated
+    bool shouldGot = (got == 0) ;
+    if (shouldGot) {
+        pinMode(pos, INPUT); // finally tri-stated
+        return;
+    }
+    got = got - 1;  pinMode(pos, OUTPUT); digitalWrite(pos, got);
 }
 
 void show_Array() {
@@ -210,7 +211,6 @@ void write_to_Array(uint8_t pos, uint8_t got) {
 
 void clear_display() {
     for (uint8_t pos = 0; pos < 11; pos++) {
-        // int got = pinArray[pos];
         write_to_Array(pos, 0);
     }
 }
@@ -220,7 +220,9 @@ void write_Array() { // in 'reading'
     if (enable_display) {
         show_Array();
     }
-    vid_blank(); // best spot for the effect
+    if (!enable_display) {
+        vid_blank(); // best spot for the effect
+    }
 }
 
 void acld() {
@@ -291,7 +293,7 @@ void test_me_cplx() {
     Serial.println();
     Serial.println(" ex. 0 asb 1 acl parr   use 0-10 as TOS for asb or acl");
     Serial.println();
-    Serial.println("   " TIMESTAMP  "  time-slicing LED array - charlie file ");
+    Serial.println("   " TIMESTAMP  "  time-slicing LED array - TEST 17b ");
 
     Serial.println();
 
