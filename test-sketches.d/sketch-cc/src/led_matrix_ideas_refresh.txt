@@ -1,0 +1,54 @@
+ multiple timers
+ 
+ a counter driven by a standard 'tick'
+ 
+ get rid of unused INPUT vs OUTPUT stuff, and explicitly
+ set ports to INPUT only if 'in the path'
+ 
+ to shave off microseconds and get less flicker by
+ iterating the overall control loop faster
+ by not wasting time on instrux that are of null value.
+ 
+ analogies from waveforms:
+ 
+ zero crossing
+ 
+ phase angle
+ 
+ the phase angle is an offset pretty much as it has
+ to happen inside one cycle (zero, max pos, zero,
+ max neg, zero for 360 deg)
+ 
+ want only one global related to entire task if possible.
+ 
+ still thinking of ways to not use unsigned long where
+ it's not essential on timings like these.
+ 
+ that's the counter principle - increment a counter.
+ 
+ reduce dependency on program length however, as the
+ long-term goal is to make the display seem 'static'
+ and run in the 'backround' .. for a program of any
+ length.  As a status display.
+ 
+ the tri state thing using 0 1 and 2 doesn't have to
+ set any pins to INPUT as they already are, after
+ one pass.
+ 
+ Easier to clear all 11 slots in one function, and
+ maybe figure out if a special single-shot function
+ is necessary to setup for the new pixel to be lit.
+ 
+ probably not as the blanking involves setting all
+ to input; so now I think the blanking needs to be
+ non global but selective just like the 'setter' is.
+ 
+ In fact a bool passed to the setter could invert
+ its function. ;)
+ 
+ Idea away from programmer's station:
+ 
+ randomize to even the LED brightnesses, by rearranging
+ sequence in which the eleven port pins are written. ;)
+ 
+mon 17 jul 14:07z 
