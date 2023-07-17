@@ -126,11 +126,11 @@ bool timeout_little = 0;
 void increment_test_counter() {
     test_counter_iterations[0]++;
     int seconds = 8;
-// unsigned long int goal = (((377 * seconds) / 3) * 1);
-//  377 i+terations * 8 seconds desired qty
-//  / 3 gives wall clock seconds
-// if (test_counter_iterations[0] == goal) { return -1; }
-// return 0;
+    // unsigned long int goal = (((377 * seconds) / 3) * 1);
+    //  377 i+terations * 8 seconds desired qty
+    //  / 3 gives wall clock seconds
+    // if (test_counter_iterations[0] == goal) { return -1; }
+    // return 0;
 }
 
 void set_all_cplx_inputs() {
@@ -185,9 +185,6 @@ bool eval_timeout() {
     return 0;
 }
 
-
-
-
 void write_pos(uint8_t pos, uint8_t got) {
 
     pos = pos + 28;
@@ -211,7 +208,7 @@ void write_pos(uint8_t pos, uint8_t got) {
 
     test_counter_iterations[pos]++;
 
-    switch(pos) {
+    switch (pos) {
     case 0:
         // test_counter_iterations[0]++;
         break;
@@ -223,28 +220,27 @@ void write_pos(uint8_t pos, uint8_t got) {
         break;
 
     case 1002:
-            Serial.print(" switch-case: ");
-            Serial.write('2');
-            Serial.print("   ");
-            break;
+        Serial.print(" switch-case: ");
+        Serial.write('2');
+        Serial.print("   ");
+        break;
 
     case 1003:
-            Serial.print(" switch-case: ");
-            Serial.write('3');
-            Serial.print("   ");
-            break;
+        Serial.print(" switch-case: ");
+        Serial.write('3');
+        Serial.print("   ");
+        break;
 
     case 10010:
         // test_counter_iterations[10]++;
         break;
 
-    // default:
-            // Serial.println("DEFAULT!");
-            // break;
+        // default:
+        // Serial.println("DEFAULT!");
+        // break;
     }
     // delay(300);
 }
-
 
 void show_Array() {
     for (uint8_t pos = 0; pos < 11; pos++) {
@@ -265,7 +261,8 @@ void vid_blank() {
 }
 
 // depends: eval_timeout, show_Array, vid_blank
-void write_Array() { // in 'reading' not called even one time in this .cpp file - see main.cpp
+void write_Array() { // in 'reading' not called even one time in this .cpp file
+                     // - see main.cpp
     bool enable_display = eval_timeout();
     if (enable_display) {
         show_Array();
@@ -275,18 +272,9 @@ void write_Array() { // in 'reading' not called even one time in this .cpp file 
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-void write_to_Array(uint8_t pos, uint8_t got) { pinArray[pos] = got; } // got can be 0 1 or 2 for tri-stating
+void write_to_Array(uint8_t pos, uint8_t got) {
+    pinArray[pos] = got;
+} // got can be 0 1 or 2 for tri-stating
 
 void clear_display() {
     for (uint8_t pos = 0; pos < 11; pos++) {
