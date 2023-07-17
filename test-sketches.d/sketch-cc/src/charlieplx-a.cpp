@@ -127,17 +127,19 @@ void gpio_setup_cplx() {
     Serial.println(cplxPin[10]);
 }
 
-unsigned long int test_counter_iterations_0 = 0;
+unsigned long int test_counter_iterations[11];
+
+void init_counter_array() { test_counter_iterations[0] = 0; }
 
 bool timeout_little = 0;
 
 bool increment_test_counter_zero() {
-    test_counter_iterations_0++;
+    test_counter_iterations[0]++;
     int seconds = 8;
     unsigned long int goal =
         (((377 * seconds) / 3) * 1); //  377 iterations * 8 seconds desired qty
                                      //  / 3 gives wall clock seconds
-    if (test_counter_iterations_0 == goal) {
+    if (test_counter_iterations[0] == goal) {
         return -1;
     }
     return 0;
@@ -326,6 +328,8 @@ void report_findings_test_timings() {
 }
 
 void test_me_cplx() {
+    init_counter_array(); // scaffolding/testing only
+
     Serial.println();
     Serial.println();
     Serial.println(" ex. 0 asb 1 acl parr   use 0-10 as TOS for asb or acl");
