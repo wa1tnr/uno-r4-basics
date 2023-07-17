@@ -97,6 +97,7 @@ void print_pinmappings(int pin) {
 
 void gpio_setup_cplx() {
     int* pinPtr;
+    Serial.println("gpio_setup_cplx() is running..");
     for (int pin = 0; pin < 11; pin++) {
 
         int* pinPtr = (int*) cplxPin[pin];
@@ -110,6 +111,7 @@ void gpio_setup_cplx() {
 
         pinMode(thePin, OUTPUT);
         digitalWrite(thePin, HIGH); // digitalWrite(cplxPin[pinPtr], LOW);
+        Serial.print("DEBUG what is going on no output LED"); // okay nothing printed so too many define guards in c preprocessing ;)
 
         print_pinmappings(pin); // print_pinmappings(pinPtr);
 
@@ -249,6 +251,91 @@ void l94() {
     if (enable_display) {
         light_l94();
         vid_blank();
+    }
+}
+
+uint16_t c_array = 0; // no bits set
+
+
+
+/*  setting it up this way (see below) allows things,
+    since it compiles clean without any comment mark-up.
+
+    In particular #ifdef 0  .. #endif  vs  slash star comment star slash foo
+
+    One of them does not really permit/allow/like bad code inside as a container
+
+    But clean code that is obviously not for a real program is okay.
+
+    Pretty sure that slash star any text star slash is the one that is safer,
+    but has the disadvantage of a loss of syntax highlighting, in rvim.
+
+    So, #ifdef is preferred, but more restrictive what can be in it.
+*/
+
+/*
+char myJunkStr[] = " " \
+    "  $  gforth"                                    \
+                                                     \
+    " decimal 28 hex . decimal 38 hex . 1C 26  ok"   \
+    " decimal 28 2 base ! . decimal 11100  ok"       \
+    " decimal 38 2 base ! . decimal 100110  ok"      ;
+*/
+
+/*
+
+   32:   100000
+         100000   and:
+         100000   that's why.
+         111111   0x3F
+
+         hex 20 negate 1 + negate bina   . 11111  ok
+         hex 1F                   bina   . 11111  ok
+
+*/
+
+void print_c_array() {
+    int p =  c_array; // normalize
+    Serial.print("    c_array: ");
+    Serial.print(p);
+    Serial.print("   ");
+}
+
+#if 0
+void acld_a() {
+    int bitmask = pop();
+    c_array = c_array & ~bitmask;
+    print_c_array();
+} /* ( n -- ) array clr bit dynamic */
+#endif
+
+#if 0
+void asbd_a() {
+    // c_array |= 0x26; // 0x26 is 
+    c_array |= pop(); // 0x26 is 
+    print_c_array();
+} /* ( n -- ) array setb dynamic */
+#endif
+
+void acld() {
+    int p = pop();
+    p = p + 28;
+    Serial.print("DEBUG: p = "); Serial.println(p);
+    pinMode(p, OUTPUT);
+    digitalWrite(p, 0);
+} /* ( n -- ) array clr bit dynamic */
+
+void asbd() {
+    int p = pop();
+    p = p + 28;
+    Serial.print("DEBUG: p = "); Serial.println(p);
+    pinMode(p, OUTPUT);
+    digitalWrite(p, 1);
+} /* ( n -- ) array clr bit dynamic */
+
+void post_arrayd() {
+    for (int index = 0b100110; index > 0b11100; index--) {
+        ; // nop testing only
     }
 }
 

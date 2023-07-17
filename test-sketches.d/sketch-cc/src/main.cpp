@@ -290,6 +290,16 @@ extern void vid_blank();
 NAMED(_l82d, "l82");
 extern void l82d();
 
+NAMED(_asb, "asb");
+extern void asbd(); // array setb dynamic
+
+NAMED(_aclb, "acl");
+// delete me: extern void acbd(); // arra clr bit dynamic
+extern void acld(); // arra clr bit dynamic
+
+NAMED(_parr, "parr");
+extern void post_arrayd(); // not sure what this will be doing yet
+
 
 /* End of application words */
 /* ******************************************** */
@@ -309,6 +319,9 @@ const entry dictionary[] = {
   {_words, words},
   {_l82d, l82d},
   {_vid_blank, vid_blank},
+  {_asb, asbd},
+  {_aclb, acld},
+  {_parr, post_arrayd},
   {_dup, dup},
   {_drop, drop},
   {_back, back},
@@ -387,6 +400,10 @@ extern void do_a_thing();
 void refresh_LED_array() {
   do_a_thing();
 }
+
+// swap these:
+#define DYNAMIC // enable ongoing LED pulsing during keyboard input or when idle
+#undef DYNAMIC // enable ongoing LED pulsing during keyboard input or when idle
 
 /* Incrementally read command line from serial port */
 byte reading() {
@@ -608,7 +625,7 @@ void setup() {
   words();
   Serial.println(" ");
   // Serial.println("NOT_READY");
-  test_program_a();
+  // test_program_a();
   test_me_cplx();
   // Serial.println("TRAPPED_READY");
   // while(-1);
