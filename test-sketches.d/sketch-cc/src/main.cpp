@@ -1,12 +1,8 @@
 #include <Arduino.h>
 // charlieplexing sketch begins:
-// Sat 15 Jul 18:20:09 UTC 2023
-
-// old program was:
-// working program - bare bones - Tue 11 Jul 17:33:04 UTC 2023
+// Mon 17 Jul 22:52:53 UTC 2023
 
 // closest upstream work is probably:
-
 // rp2040-wokwi-ser_interpret/interpreter-c/interpreter-c.ino
 
 // https://github.com/wa1tnr/rp2040-wokwi-ser_interpret/blob/main/interpreter-c/interpreter-c.ino
@@ -592,12 +588,9 @@ void test_program_a(void) {
 extern void test_me_cplx();
 
 void setup() {
-    /* functioning program Uno R4 WiFi 17:32 UTC 11 July 2023 */
-    /* basic printing works - press RESET after upload or add timing delays to
-     * see output */
-    Serial.begin(115200); // this
-    delay(500);
-    // while (!Serial);  not on uno r4 wifi as it has a bridge chip ESP32 iirc
+    Serial.begin(115200);
+    delay(700); // system *does* glitch and sometimes power must be cycled
+    // while (!Serial);  not on uno r4 wifi - it has a bridge chip ESP32
     Serial.println();
     delay(500);
     Serial.println();
@@ -606,15 +599,11 @@ void setup() {
     delay(500);
     Serial.println("Forth-like interpreter:");
     Serial.println();
-    Serial.println("dvlp-aa  6f39da7  Wed 12 Jul 05:17:18 UTC 2023");
+    Serial.println("dvlp-bb  a67cf6d  Mon 17 Jul 22:52:53 UTC 2023");
 
     words();
     Serial.println(" ");
-    // Serial.println("NOT_READY");
-    // test_program_a();
     test_me_cplx();
-    // Serial.println("TRAPPED_READY");
-    // while(-1);
     Serial.println("READY");
 }
 
@@ -622,4 +611,4 @@ void loop() {
     readword();
     runword();
 }
-/* END */ /* UNTESTED EDIT */
+/* END */

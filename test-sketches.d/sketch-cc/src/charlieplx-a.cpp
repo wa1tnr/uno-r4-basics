@@ -1,7 +1,7 @@
 #include <Arduino.h>
 // charlieplexing the Uno Wifi R4
 
-// Mon 17 Jul 17:22:25 UTC 2023
+// Mon 17 Jul 22:52:53 UTC 2023
 
 // very early in development - expect nothing interesting .. yet.
 
@@ -253,10 +253,11 @@ void hold_on_thar() {
     unsigned long duration = 0;
     do {
         duration = micros() - old_blanking_micros;
-    } while (duration < 22000); // 9000
+    } while (duration < 19101);
+    // so 32k is like 58 Hz vid refresh
+    // whereas 22k is more like 68 Hz - still feel it but not obvious
     old_blanking_micros = micros();
 }
-/*  9000 is about right - not sensitive.  90000 will be obviously blinking */
 
 void show_Array() {
     for (uint8_t pos = 0; pos < 11; pos++) {
@@ -384,7 +385,7 @@ const int xcplxPin[22] = {
 37 high LED lights
 */
 
-#define TIMESTAMP "Mon 17 Jul 21:26:05 UTC 2023"
+#define TIMESTAMP "Mon 17 Jul 22:52:53 UTC 2023"
 
 void report_findings_test_timings() {
     Serial.println("report findings: the 'res' word.");
