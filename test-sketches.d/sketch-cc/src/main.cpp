@@ -402,13 +402,15 @@ void refresh_LED_array() {
 }
 
 // swap these:
-#define DYNAMIC // enable ongoing LED pulsing during keyboard input or when idle
 #undef DYNAMIC // enable ongoing LED pulsing during keyboard input or when idle
+#define DYNAMIC // enable ongoing LED pulsing during keyboard input or when idle
 
 /* Incrementally read command line from serial port */
 byte reading() {
 #ifdef DYNAMIC
-  refresh_LED_array();
+  // refresh_LED_array();
+extern void write_Array();
+  write_Array();
 #endif
   if (!Serial.available()) return 1;
   ch = Serial.read();

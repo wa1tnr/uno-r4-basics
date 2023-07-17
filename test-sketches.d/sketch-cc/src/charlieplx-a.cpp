@@ -12,6 +12,8 @@ const int cplxPin[11] = {
 //   0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10
 };
 
+int pinArray[11] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
 /* variant.cpp says:
 
    P003 is D28
@@ -301,6 +303,41 @@ void print_c_array() {
     Serial.print("   ");
 }
 
+
+void write_pos(uint8_t pos, uint8_t got) {
+    pos = pos + 28;
+    pinMode(pos, OUTPUT);
+    digitalWrite(pos, got);
+    Serial.print("DEBUG pos, got: ");
+    Serial.print(pos);
+    Serial.print(", ");
+    Serial.println(got);
+    delay(300);
+}
+
+void show_Array() {
+    for (uint8_t pos = 0; pos < 11; pos++) {
+        int got = pinArray[pos];
+        write_pos(pos, got);
+    }
+}
+
+void write_Array() { // in 'reading'
+    bool enable_display = eval_timeout();
+    if (enable_display) {
+        show_Array();
+        vid_blank();
+    }
+}
+
+void write_to_Array(uint8_t pos, uint8_t got) {
+    pos = pos + 28;
+    pinArray[pos] = got;
+}
+
+// #bookmark
+
+
 #if 0
 void acld_a() {
     int bitmask = pop();
@@ -321,16 +358,22 @@ void acld() {
     int p = pop();
     p = p + 28;
     Serial.print("DEBUG: p = "); Serial.println(p);
-    pinMode(p, OUTPUT);
-    digitalWrite(p, 0);
+    uint8_t pos = (uint8_t) p;
+    // write_to_Array(uint8_t pos, uint8_t got);
+    write_to_Array(pos, (uint8_t) 0);
+    // pinMode(p, OUTPUT);
+    // digitalWrite(p, 0);
 } /* ( n -- ) array clr bit dynamic */
 
+// setb
 void asbd() {
     int p = pop();
     p = p + 28;
     Serial.print("DEBUG: p = "); Serial.println(p);
-    pinMode(p, OUTPUT);
-    digitalWrite(p, 1);
+    uint8_t pos = (uint8_t) p;
+    write_to_Array(pos, (uint8_t) 1);
+    // pinMode(p, OUTPUT);
+    // digitalWrite(p, 1);
 } /* ( n -- ) array clr bit dynamic */
 
 void post_arrayd() {
