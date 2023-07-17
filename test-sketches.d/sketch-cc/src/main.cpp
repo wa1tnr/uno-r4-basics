@@ -391,9 +391,8 @@ void refresh_LED_array() { do_a_thing(); }
 /* Incrementally read command line from serial port */
 byte reading() {
 #ifdef DYNAMIC
-    // refresh_LED_array();
-    extern void write_Array();
-    write_Array();
+    extern void write_Charlie_pixel_array();
+    write_Charlie_pixel_array();
 #endif
     if (!Serial.available())
         return 1;

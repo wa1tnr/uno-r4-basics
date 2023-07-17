@@ -263,27 +263,27 @@ int blanking_counter = 0;
 
 const int blank_periods = 188;
 
-
-
 unsigned long old_blanking_micros = 0;
 
+// delay after clearing video
+void hold_on_thar() {
+    unsigned long duration = 0;
+    do {
+        duration = micros() - old_blanking_micros;
+    } while (duration < 9000);
+    old_blanking_micros = micros();
+}
+/*  9000 is about right - not sensitive.  90000 will be obviously blinking */
+
 void vid_blank() {
-
     blanking_counter++;
-
     bool blanked_plenty = (blanking_counter > blank_periods);
 
     if (blanked_plenty) {
-
         blanking_counter = 0;
-
+        // first blank then pause:
         set_all_cplx_inputs();
-
-        unsigned long duration = 0;
-        do {
-            duration = micros() - old_blanking_micros;
-        } while (duration < 9000);
-        old_blanking_micros = micros();
+        hold_on_thar();
     }
 }
 
@@ -294,9 +294,9 @@ unsigned long master_counter = 0;
 unsigned long old_loop_micros = micros();
 unsigned long loop_duration = 0;
 
-
-void write_Array() { // in 'reading' not called even one time in this .cpp file
-                     // - see main.cpp
+void write_Charlie_pixel_array() { // in 'reading' not called even one time in
+                                   // this .cpp file
+                                   // - see main.cpp
     unsigned long loop_micros = micros();
 
     master_counter++;
