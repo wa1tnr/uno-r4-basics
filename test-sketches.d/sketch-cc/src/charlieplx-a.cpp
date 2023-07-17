@@ -157,7 +157,7 @@ void set_low(int pin) { digitalWrite(cplxPin[pin], LOW); }
 
 unsigned long int oldMicros = micros();
 
-unsigned long int TIMEOUT = 693;
+unsigned long int TIMEOUT = 493;
 
 extern int pop();
 extern void dup();
@@ -246,34 +246,28 @@ void write_pos(uint8_t pos, uint8_t got) {
     // delay(300);
 }
 
+unsigned long old_blanking_micros = 0;
+// delay after clearing video
+
+void hold_on_thar() {
+    unsigned long duration = 0;
+    do {
+        duration = micros() - old_blanking_micros;
+    } while (duration < 22000); // 9000
+    old_blanking_micros = micros();
+}
+/*  9000 is about right - not sensitive.  90000 will be obviously blinking */
+
 void show_Array() {
     for (uint8_t pos = 0; pos < 11; pos++) {
         int got = pinArray[pos];
         write_pos(pos, got);
-
-        if (timeout_little) {
-            Serial.println(" TIMEOUT!  It is HERE!  Holding forever..");
-            while (-1)
-                ;
-        }
     }
 }
 
 int blanking_counter = 0;
 
 const int blank_periods = 188;
-
-unsigned long old_blanking_micros = 0;
-
-// delay after clearing video
-void hold_on_thar() {
-    unsigned long duration = 0;
-    do {
-        duration = micros() - old_blanking_micros;
-    } while (duration < 9000);
-    old_blanking_micros = micros();
-}
-/*  9000 is about right - not sensitive.  90000 will be obviously blinking */
 
 void vid_blank() {
     blanking_counter++;
