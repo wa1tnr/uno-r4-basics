@@ -140,26 +140,9 @@ void set_all_cplx_inputs() {
     pinMode(38, INPUT);
 }
 
-void set_as_input(int pin) {
-    pinMode(cplxPin[pin], INPUT);
-}
+// void set_as_input(int pin) { }
 
-void set_as_output(int pin) {
-
-    int outpin = cplxPin[pin];
-
-    Serial.print(outpin);
-
-    if (outpin > 38) {
-        Serial.println("ERROR");
-        while(-1);
-    }
-
-    pinMode(outpin, OUTPUT);
-
-    Serial.println(" is set to OUTPUT");
-
-}
+// void set_as_output(int pin) { }
 
 void set_high(int pin) {
     digitalWrite(cplxPin[pin], HIGH);
@@ -196,10 +179,7 @@ void light_l82() {
     digitalWrite(28, LOW);  //  0
 }
 
-void Xunlight_l82() {
-    pinMode(28, INPUT);
-    pinMode(38, INPUT);
-}
+// void Xunlight_l82() { }
 
 void l82() {
     bool enable_display = eval_timeout();
@@ -239,10 +219,7 @@ void light_l94() {
     digitalWrite(37, HIGH); // 9
 }
 
-void Xunlight_l94() {
-    pinMode(31, INPUT);
-    pinMode(37, INPUT);
-}
+// void Xunlight_l94() { }
 
 void l94() {
     bool enable_display = eval_timeout();
@@ -306,8 +283,10 @@ void print_c_array() {
 
 void write_pos(uint8_t pos, uint8_t got) {
     pos = pos + 28;
-    pinMode(pos, OUTPUT);
-    digitalWrite(pos, got);
+    if (got == 1) { pinMode(pos, OUTPUT); }
+    if (got == 2) { pinMode(pos, OUTPUT); }
+    if (got == 1 | got == 2) { digitalWrite(pos, got); return; }
+    pinMode(pos, INPUT); // finally tri-stated
 }
 
 void show_Array() {
@@ -320,9 +299,9 @@ void show_Array() {
 void write_Array() { // in 'reading'
     bool enable_display = eval_timeout();
     if (enable_display) {
+        vid_blank();
         show_Array();
         while(eval_timeout());
-        vid_blank();
     }
 }
 
@@ -333,14 +312,14 @@ void write_to_Array(uint8_t pos, uint8_t got) {
 void acld() {
     int p = pop();
     uint8_t pos = (uint8_t) p;
-    write_to_Array(pos, (uint8_t) 0);
+    write_to_Array(pos, (uint8_t) 1);
 } /* ( n -- ) array clr bit dynamic */
 
 // setb
 void asbd() {
     int p = pop();
     uint8_t pos = (uint8_t) p;
-    write_to_Array(pos, (uint8_t) 1);
+    write_to_Array(pos, (uint8_t) 2);
 } /* ( n -- ) array clr bit dynamic */
 
 void post_arrayd() {
