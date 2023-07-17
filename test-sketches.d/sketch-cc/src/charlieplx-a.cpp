@@ -268,8 +268,13 @@ void vid_blank() {
 
 unsigned long master_counter = 0;
 
+unsigned long old_loop_micros = micros();
+unsigned long loop_duration = 0;
+
 void write_Array() { // in 'reading' not called even one time in this .cpp file
                      // - see main.cpp
+    unsigned long loop_micros = micros();
+
     master_counter++;
     bool enable_display = eval_timeout();
     if (enable_display) {
@@ -278,6 +283,8 @@ void write_Array() { // in 'reading' not called even one time in this .cpp file
     if (!enable_display) {
         vid_blank(); // best spot for the effect
     }
+    loop_duration = loop_micros - old_loop_micros;
+    old_loop_micros = loop_micros;
 }
 
 void write_to_Array(uint8_t pos, uint8_t got) {
@@ -359,45 +366,28 @@ const int xcplxPin[22] = {
 37 high LED lights
 */
 
-#define TIMESTAMP "Mon 17 Jul 03:08:14 UTC 2023"
+#define TIMESTAMP "Mon 17 Jul 21:26:05 UTC 2023"
 
 void report_findings_test_timings() {
     Serial.println("report findings: the 'res' word.");
-
+    Serial.print(" last loop duraton, in uSec: ");
+    Serial.print(loop_duration);
+    Serial.print("    ");
     Serial.print("\n master counter: ");
     Serial.println(master_counter);
 
     for (int pos = 0; pos < 11; pos++) {
-
-        // reference only: unsigned long master_counter = 0;
         unsigned long output = test_counter_iterations[pos];
-
-        float test_float = 22 / 7;
-
+        // float test_float = 22 / 7;
         Serial.print(" counter: ");
         Serial.print(output);
-
         Serial.print(" ratio: ");
-
         char buffer[64];
         buffer[0] = '\000';
-
-        // width . precision length conversion
-
-        // snprintf(buffer, 63, "%8.8f%c", test_float, '\000');
-
-        // snprintf(buffer, sizeof(buffer), "abcdefg  \n", '\000');
-        // Serial.print(buffer);
-
-        // float ratio = (float) master_counter / (float) output;
-
-        // snprintf(buffer, sizeof(buffer), "%.4f\n%c", test_ratio, '\000');
         float calculation = master_counter / 0.9999999999;
         float ratio = output / calculation;
         float r_ratio = 1 / ratio;
-        // snprintf(buffer, sizeof(buffer), "abc%15.5f%c", calculation, '\000');
         Serial.print(r_ratio);
-
         Serial.println();
     }
 
