@@ -157,7 +157,7 @@ void set_low(int pin) { digitalWrite(cplxPin[pin], LOW); }
 
 unsigned long int oldMicros = micros();
 
-unsigned long int TIMEOUT = 9933;
+unsigned long int TIMEOUT = 693;
 
 extern int pop();
 extern void dup();
@@ -259,9 +259,32 @@ void show_Array() {
     }
 }
 
+int blanking_counter = 0;
+
+const int blank_periods = 188;
+
+
+
+unsigned long old_blanking_micros = 0;
+
 void vid_blank() {
-    set_all_cplx_inputs();
-    // oldMicros = micros();
+
+    blanking_counter++;
+
+    bool blanked_plenty = (blanking_counter > blank_periods);
+
+    if (blanked_plenty) {
+
+        blanking_counter = 0;
+
+        set_all_cplx_inputs();
+
+        unsigned long duration = 0;
+        do {
+            duration = micros() - old_blanking_micros;
+        } while (duration < 9000);
+        old_blanking_micros = micros();
+    }
 }
 
 // depends: eval_timeout, show_Array, vid_blank
@@ -270,6 +293,7 @@ unsigned long master_counter = 0;
 
 unsigned long old_loop_micros = micros();
 unsigned long loop_duration = 0;
+
 
 void write_Array() { // in 'reading' not called even one time in this .cpp file
                      // - see main.cpp
