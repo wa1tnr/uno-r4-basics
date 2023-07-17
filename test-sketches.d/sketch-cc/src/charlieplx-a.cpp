@@ -285,7 +285,7 @@ void write_pos(uint8_t pos, uint8_t got) {
     pos = pos + 28;
     if (got == 1) { pinMode(pos, OUTPUT); }
     if (got == 2) { pinMode(pos, OUTPUT); }
-    if (got == 1 | got == 2) { digitalWrite(pos, got); return; }
+    if (got == 1 || got == 2) { got = got - 1;  digitalWrite(pos, got); return; }
     pinMode(pos, INPUT); // finally tri-stated
 }
 
