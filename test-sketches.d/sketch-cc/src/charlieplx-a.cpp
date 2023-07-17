@@ -1,7 +1,7 @@
 #include <Arduino.h>
 // charlieplexing the Uno Wifi R4
 
-// Sat 15 Jul 18:20:09 UTC 2023
+// Mon 17 Jul 17:22:25 UTC 2023
 
 // very early in development - expect nothing interesting .. yet.
 
@@ -79,10 +79,8 @@ void print_pinmappings(int pin) {
     int remainder = (pin + 1) % COLUMNS_AA;
 
     if (!ESSENTIAL) {
-        // Serial.println(" this is the columns part ");
         Serial.print(" remainder: ");
         Serial.println(remainder);
-        // Serial.print("  ");
     }
 
     if (!ESSENTIAL) {
@@ -113,18 +111,10 @@ void gpio_setup_cplx() {
 
         pinMode(thePin, OUTPUT);
         digitalWrite(thePin, HIGH); // digitalWrite(cplxPin[pinPtr], LOW);
-        Serial.print(
-            "DEBUG what is going on no output LED"); // okay nothing printed so
-                                                     // too many define guards
-                                                     // in c preprocessing ;)
 
         print_pinmappings(pin); // print_pinmappings(pinPtr);
     }
     Serial.println();
-    // Serial.print(" last pin in array is: ");
-    // Serial.println(cplxPin[9]); // says 37 so it's cplxPin[10]
-    Serial.print(" last pin in array is: ");
-    Serial.println(cplxPin[10]);
 }
 
 unsigned long int test_counter_iterations[11];
@@ -133,16 +123,14 @@ void init_counter_array() { test_counter_iterations[0] = 0; }
 
 bool timeout_little = 0;
 
-bool increment_test_counter_zero() {
+void increment_test_counter() {
     test_counter_iterations[0]++;
     int seconds = 8;
-    unsigned long int goal =
-        (((377 * seconds) / 3) * 1); //  377 iterations * 8 seconds desired qty
-                                     //  / 3 gives wall clock seconds
-    if (test_counter_iterations[0] == goal) {
-        return -1;
-    }
-    return 0;
+// unsigned long int goal = (((377 * seconds) / 3) * 1);
+//  377 i+terations * 8 seconds desired qty
+//  / 3 gives wall clock seconds
+// if (test_counter_iterations[0] == goal) { return -1; }
+// return 0;
 }
 
 void set_all_cplx_inputs() {
@@ -165,28 +153,7 @@ void set_low(int pin) { digitalWrite(cplxPin[pin], LOW); }
 
 unsigned long int oldMicros = micros();
 
-// #define TIMEOUT    933
-
-// #define TIMEOUT    933
 unsigned long int TIMEOUT = 9933;
-// #define TIMEOUT    433
-// #define TIMEOUT    233
-
-bool eval_timeout() {
-    unsigned long currentMicros = micros();
-    unsigned long intervalAsFound = currentMicros - oldMicros;
-
-    if (intervalAsFound > TIMEOUT) {
-        oldMicros = currentMicros;
-        return -1;
-    }
-    return 0;
-}
-
-void vid_blank() {
-    set_all_cplx_inputs();
-    // oldMicros = micros();
-}
 
 extern int pop();
 extern void dup();
@@ -207,25 +174,77 @@ void print_c_array() {
     Serial.print("   ");
 }
 
+bool eval_timeout() {
+    unsigned long currentMicros = micros();
+    unsigned long intervalAsFound = currentMicros - oldMicros;
+
+    if (intervalAsFound > TIMEOUT) {
+        oldMicros = currentMicros;
+        return -1;
+    }
+    return 0;
+}
+
+
+
+
 void write_pos(uint8_t pos, uint8_t got) {
+
     pos = pos + 28;
+
     bool shouldGot = (got == 0);
+
     if (shouldGot) {
         pinMode(pos, INPUT); // finally tri-stated
         return;
     }
+
     got = got - 1;
+
     pinMode(pos, OUTPUT);
+
     digitalWrite(pos, got);
 
     // TIME ASSESSMENT ONLY:       repeat all lc: time assessment only
-    if (pos == 0 + 28) { // only triggers when a pixel is lit as the early
-                         // return masks program flow to this juncture.
-        // increment_test_counter();
-        timeout_little = 0; // reset
-        timeout_little = increment_test_counter_zero();
+
+    pos = pos - 28;
+
+    test_counter_iterations[pos]++;
+
+    switch(pos) {
+    case 0:
+        // test_counter_iterations[0]++;
+        break;
+
+    case 1001:
+        Serial.print(" switch-case: ");
+        Serial.write('1');
+        Serial.print("   ");
+        break;
+
+    case 1002:
+            Serial.print(" switch-case: ");
+            Serial.write('2');
+            Serial.print("   ");
+            break;
+
+    case 1003:
+            Serial.print(" switch-case: ");
+            Serial.write('3');
+            Serial.print("   ");
+            break;
+
+    case 10010:
+        // test_counter_iterations[10]++;
+        break;
+
+    // default:
+            // Serial.println("DEFAULT!");
+            // break;
     }
+    // delay(300);
 }
+
 
 void show_Array() {
     for (uint8_t pos = 0; pos < 11; pos++) {
@@ -240,21 +259,38 @@ void show_Array() {
     }
 }
 
-void write_to_Array(uint8_t pos, uint8_t got) { pinArray[pos] = got; }
-
-void clear_display() {
-    for (uint8_t pos = 0; pos < 11; pos++) {
-        write_to_Array(pos, 0);
-    }
+void vid_blank() {
+    set_all_cplx_inputs();
+    // oldMicros = micros();
 }
 
-void write_Array() { // in 'reading'
+// depends: eval_timeout, show_Array, vid_blank
+void write_Array() { // in 'reading' not called even one time in this .cpp file - see main.cpp
     bool enable_display = eval_timeout();
     if (enable_display) {
         show_Array();
     }
     if (!enable_display) {
         vid_blank(); // best spot for the effect
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+void write_to_Array(uint8_t pos, uint8_t got) { pinArray[pos] = got; } // got can be 0 1 or 2 for tri-stating
+
+void clear_display() {
+    for (uint8_t pos = 0; pos < 11; pos++) {
+        write_to_Array(pos, 0); // set to INPUT
     }
 }
 
@@ -325,6 +361,17 @@ const int xcplxPin[22] = {
 
 void report_findings_test_timings() {
     Serial.println("SKELETON: report findings: the 'res' word.");
+
+    for (int pos = 0; pos < 11; pos++) {
+
+        unsigned long output = test_counter_iterations[pos];
+
+        Serial.print(" counter: ");
+        Serial.print(output);
+        Serial.println();
+    }
+
+    Serial.println("fin");
 }
 
 void test_me_cplx() {
