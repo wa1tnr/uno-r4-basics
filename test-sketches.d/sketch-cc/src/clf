@@ -1,0 +1,21 @@
+#!/bin/sh
+export FOUND=${1}
+
+if ! [ ${FOUND} ]; then
+        echo fail
+        exit 1
+fi
+
+# echo succeed - passes first sieve filter
+
+if ! [ -f ${1} ]; then # if there is no file by this name
+    echo no file
+    exit 1
+fi
+
+# echo really succeed
+clang-format -i -style=file ${1}
+exit 0
+
+if ! [ ${FOUND} ]; then echo fail;
+if [ ${FOUND} == ${FOUND} ]; then echo fail;
