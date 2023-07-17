@@ -135,16 +135,10 @@ bool increment_test_counter_zero() {
   test_counter_iterations_0++;
   int seconds = 8;
   unsigned long int goal =
-      (  ((377 * seconds) / 3)   * 1) ; //  377 iterations * 8 seconds desired qty / 3
-                             //  gives wall clock seconds
+      (((377 * seconds) / 3) * 1); //  377 iterations * 8 seconds desired qty /
+                                   //  3 gives wall clock seconds
   if (test_counter_iterations_0 == goal) {
     return -1;
-    Serial.print("TEST GOAL reached at: ");
-    Serial.println(goal);
-    Serial.println("\n\n   TERMINAL VELOCITY! okay that's not remotely "
-                   "factual, but..  HOLDING FOREVER HERE.");
-    while (-1)
-      ;
   }
   return 0;
 }
@@ -237,10 +231,10 @@ void show_Array() {
     write_pos(pos, got);
 
     if (timeout_little) {
-        Serial.println(" TIMEOUT!  It is HERE!  Holding forever..");
-        while(-1);
+      Serial.println(" TIMEOUT!  It is HERE!  Holding forever..");
+      while (-1)
+        ;
     }
-
   }
 }
 
@@ -328,7 +322,7 @@ const int xcplxPin[22] = {
 #define TIMESTAMP "Mon 17 Jul 03:08:14 UTC 2023"
 
 void report_findings_test_timings() {
-    Serial.println("SKELETON: report findings: the 'res' word.");
+  Serial.println("SKELETON: report findings: the 'res' word.");
 }
 
 void test_me_cplx() {
