@@ -1,5 +1,50 @@
 # findings - charlieplex current draw
 
+Tue 18 Jul 01:41:03 UTC 2023
+
+l82 will not light brightly whereas another LED in the
+array lights to a nice mid-bright gamma.
+
+No reason has been uncovered yet, as to why this is.
+
+0 acl 1 asb
+0 asb 1 acl
+
+Neither of these light dimly as l82 does.
+
+The l82 word sets the direction to OUTPUT for just two port pins,
+pin 0 (real pin: D28) and pin 10 (real pin: D38).
+
+```
+   0 acl   clears D28 (pin '0' here).
+  10 asb   sets   D38 (pin '10' here).
+```
+
+mnemonics are:
+
+```
+  'acl' for clear an Arduino port pin (OUTPUT, LOW);
+
+  'asb' for set   an Arduino port pin (OUTPUT, HIGH);
+```
+
+clr and setb are reserved for other uses and are not implemented.
+
+In Arduino (C++) this is:
+```
+  pinMode(28, OUTPUT); digitalWrite(28, LOW);
+  pinMode(38, OUTPUT); digitalWrite(38, HIGH);
+```
+
+In this program, the l82 word was coded as:
+
+void l82d() {
+    push(0); acld();
+    push(10); asbd();
+}
+
+And other definitions in C++ take care of the details.
+
 Sun 16 Jul 19:17:11 UTC 2023
 
   https://www.renesas.com/us/en/document/dst/isl854102-datasheet
