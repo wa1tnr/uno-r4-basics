@@ -1,11 +1,12 @@
 #include <Arduino.h>
 // charlieplexing the Uno Wifi R4
 
-// Mon 17 Jul 22:52:53 UTC 2023
+// Mon 17 Jul 23:58:00 UTC 2023
 
 // very early in development - expect nothing interesting .. yet.
 
-#define ESSENTIAL 0 // -1
+// #define ESSENTIAL 0 // -1
+#define ESSENTIAL -1 // 0
 
 const int cplxPin[11] = {
     28, 29, 30, 31, 32, 33,
@@ -189,63 +190,6 @@ bool eval_timeout() {
     return 0;
 }
 
-void write_pos(uint8_t pos, uint8_t got) {
-
-    pos = pos + 28;
-
-    bool shouldGot = (got == 0);
-
-    if (shouldGot) {
-        pinMode(pos, INPUT); // finally tri-stated
-        return;
-    }
-
-    got = got - 1;
-
-    pinMode(pos, OUTPUT);
-
-    digitalWrite(pos, got);
-
-    // TIME ASSESSMENT ONLY:       repeat all lc: time assessment only
-
-    pos = pos - 28;
-
-    test_counter_iterations[pos]++;
-
-    switch (pos) {
-    case 0:
-        // test_counter_iterations[0]++;
-        break;
-
-    case 1001:
-        Serial.print(" switch-case: ");
-        Serial.write('1');
-        Serial.print("   ");
-        break;
-
-    case 1002:
-        Serial.print(" switch-case: ");
-        Serial.write('2');
-        Serial.print("   ");
-        break;
-
-    case 1003:
-        Serial.print(" switch-case: ");
-        Serial.write('3');
-        Serial.print("   ");
-        break;
-
-    case 10010:
-        // test_counter_iterations[10]++;
-        break;
-
-        // default:
-        // Serial.println("DEFAULT!");
-        // break;
-    }
-    // delay(300);
-}
-
 unsigned long old_blanking_micros = 0;
 // delay after clearing video
 
@@ -253,10 +197,29 @@ void hold_on_thar() {
     unsigned long duration = 0;
     do {
         duration = micros() - old_blanking_micros;
-    } while (duration < 19101);
+    } while (duration < 101);
     // so 32k is like 58 Hz vid refresh
     // whereas 22k is more like 68 Hz - still feel it but not obvious
     old_blanking_micros = micros();
+}
+
+void write_pos(uint8_t pos, uint8_t got) {
+    pos = pos + 28;
+    bool shouldGot = (got == 0);
+    if (shouldGot) {
+        pinMode(pos, INPUT); // finally tri-stated
+        return;
+    }
+    // one of three tri-state states handled just above.
+    // here are the other two:
+    got = got - 1;
+    // storage has logic level encoded as 1 or 2 - instead of 0 or 1
+
+    pinMode(pos, OUTPUT);
+    digitalWrite(pos, got); // this is the moment an LED potentially turns ON
+
+    pos = pos - 28;
+    test_counter_iterations[pos]++; // counter, per port pin, for metrics
 }
 
 void show_Array() {
@@ -289,6 +252,8 @@ unsigned long master_counter = 0;
 unsigned long old_loop_micros = micros();
 unsigned long loop_duration = 0;
 
+unsigned long explicit_blanking_t = 0;
+
 void write_Charlie_pixel_array() { // in 'reading' not called even one time in
                                    // this .cpp file
                                    // - see main.cpp
@@ -297,7 +262,13 @@ void write_Charlie_pixel_array() { // in 'reading' not called even one time in
     master_counter++;
     bool enable_display = eval_timeout();
     if (enable_display) {
-        show_Array();
+        unsigned long delta_t = micros() - explicit_blanking_t;
+        if (delta_t > 9999) {
+            explicit_blanking_t = micros();
+            show_Array();
+            set_all_cplx_inputs();
+        }
+        vid_blank();
     }
     if (!enable_display) {
         vid_blank(); // best spot for the effect
@@ -385,7 +356,7 @@ const int xcplxPin[22] = {
 37 high LED lights
 */
 
-#define TIMESTAMP "Mon 17 Jul 22:52:53 UTC 2023"
+#define TIMESTAMP "Mon 17 Jul 23:58:00 UTC 2023"
 
 void report_findings_test_timings() {
     Serial.println("report findings: the 'res' word.");

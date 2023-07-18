@@ -1,6 +1,6 @@
 #include <Arduino.h>
 // charlieplexing sketch begins:
-// Mon 17 Jul 22:52:53 UTC 2023
+// Mon 17 Jul 23:58:00 UTC 2023
 
 // closest upstream work is probably:
 // rp2040-wokwi-ser_interpret/interpreter-c/interpreter-c.ino
@@ -599,8 +599,7 @@ void setup() {
     delay(500);
     Serial.println("Forth-like interpreter:");
     Serial.println();
-    Serial.println("dvlp-bb  a67cf6d  Mon 17 Jul 22:52:53 UTC 2023");
-
+    Serial.println("dvlp-aa  bd872d9  Mon 17 Jul 23:58:00 UTC 2023");
     words();
     Serial.println(" ");
     test_me_cplx();
