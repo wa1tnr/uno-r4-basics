@@ -1,0 +1,48 @@
+Tue 18 Jul 01:41:03 UTC 2023
+
+ l1 3L 7H
+ l2 3H 7L
+ l3 4L 7H
+ l4 4H 7L
+ l5 4L 3H
+ l6 4H 3L
+ l7 8L 7H
+ l8 8H 7L
+ l9 8L 3H
+l10 8H 3L
+l11 8L 4H
+l12 8H 4L
+l13 0L 7H
+l14 0H 7L
+l15 0L 3H
+l16 0H 3L
+l17 0L 4H
+l18 0H 4L
+l19 0L 8H
+l20 0H 8L
+l21 6L 7H
+l22 6H 7L
+l23 6L 3H
+l24 6H 3L
+l25 6L 4H
+l26 6H 4L
+l27 6L 8H
+l28 6H 8L
+l29 6L 0H
+l30 6H 0L
+l31 5L 7H
+l32 5H 7L
+l33 5L 3H
+l34 5H 3L
+l35 5L 4H
+l36 5H 4L
+l37 5L 8H
+l38 5H 8L
+l39 5L 0H
+l40 5H 0L
+l41 5L 6H
+l42 5H 6L
+
+more to follow
+
+END
