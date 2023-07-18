@@ -38,12 +38,38 @@ In Arduino (C++) this is:
 
 In this program, the l82 word was coded as:
 
+```
 void l82d() {
     push(0); acld();
     push(10); asbd();
 }
+```
 
 And other definitions in C++ take care of the details.
+
+```
+  5 asb 10 acl   lower left corner - cell 85 - this will be the l85 word
+```
+
+.. if the scheme is continued. ;)
+
+That means D38 (pin '10' locally) operates the next five of the LEDs 'to the right'
+of LED 85 (through LED 90, where the bus of D38 'ends').
+
+```
+  5 acl 10 asb - l86
+  1 asb 10 acl - l87
+  1 acl 10 asb - l88
+```
+
+In forth:
+
+```
+  ok
+  1 asb 10 acl cls 1 acl 10 asb cls  \ convenient to do twins in one row
+
+```
+
 
 Sun 16 Jul 19:17:11 UTC 2023
 
