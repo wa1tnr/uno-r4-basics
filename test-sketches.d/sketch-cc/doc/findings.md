@@ -18,6 +18,7 @@ pin 0 (real pin: D28) and pin 10 (real pin: D38).
 ```
    0 acl   clears D28 (pin '0' here).
   10 asb   sets   D38 (pin '10' here).
+  cls      clears the entire display (the storage array)
 ```
 
 mnemonics are:
@@ -69,6 +70,18 @@ In forth:
   1 asb 10 acl cls 1 acl 10 asb cls  \ convenient to do twins in one row
 
 ```
+*This particular forth-like interpreter punishes any wrong entries,
+and so it is convenient to type 'cls' on the same line, when done
+looking at the lit pixel.  Do not do so until you want it to go away.*
+
+*Typing a space at the command line has the exact same effect as
+pressing ENTER does, except there is no newline - you remain on
+the same line you were already typing on.*
+
+*All integers are pushed onto the stack, and all forth words are
+executed, as soon as you follow any of them with either the ENTER key
+- or just by pressing the spacebar ;)*
+
 
 
 Sun 16 Jul 19:17:11 UTC 2023
