@@ -1,11 +1,9 @@
-0.1.0-pre-alpha READY.FOR.RELEASE
+0.1.1-pre-alpha READY.FOR.RELEASE
 
-last commit 5a176f584cd38ac1ae9400bf7aebed77335ae988
+last commit b799887dc25f8c3d5650f06860f97fc4138554ec
 
-Date:   Tue Jul 11 17:40:59 UTC 2023
+Date:   Tue Jul 18 00:06:22 UTC 2023
 
-    KLUDGE - clean up print channel program start
-    
-      Just sent the USB to USART bridge a few spaced println's,
-      to train the autobaud or whatever it is doing to print.
-      Saw too much junk on the terminal otherwise.
+    Does EXACTLY what is wanted hurrah
+
+    wrt sketch-cc that is.
