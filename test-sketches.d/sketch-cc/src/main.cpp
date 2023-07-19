@@ -278,6 +278,8 @@ extern void post_arrayd(); // not sure what this will be doing yet
 NAMED(_find_times, "res"); // results of timings
 extern void report_findings_test_timings();
 
+#include "matrix.h"
+
 /* End of application words */
 /* ******************************************** */
 /* Now build the dictionary */
@@ -294,7 +296,10 @@ void words();
 const entry dictionary[] = {
     {_nop, nop},
     {_words, words},
+
     {_l82d, l82d},
+#include "dict.h"
+
     {_vid_blank, vid_blank},
     {_cls, clear_display_data}, // zero all elements in parr array
     {_asb, asbd},
