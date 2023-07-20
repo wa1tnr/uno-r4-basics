@@ -1,0 +1,39 @@
+sizeof(binPins): 8
+sizeof(binPins[0]): 2
+sizeof(bitArray): 3a
+sizeof(bitArray[0]): 2
+
+ bitArray[0].dir:  0     bitArray[0].bits:  0b00010001000  0x088
+ bitArray[1].dir:  1     bitArray[1].bits:  0b00010001000  0x088
+ bitArray[2].dir:  0     bitArray[2].bits:  0b00010010000  0x090
+ bitArray[3].dir:  1     bitArray[3].bits:  0b00010010000  0x090
+ bitArray[4].dir:  1     bitArray[4].bits:  0b00000011000  0x018
+ bitArray[5].dir:  0     bitArray[5].bits:  0b00000011000  0x018
+ bitArray[6].dir:  1     bitArray[6].bits:  0b00110000000  0x180
+ bitArray[7].dir:  0     bitArray[7].bits:  0b00110000000  0x180
+ bitArray[8].dir:  1     bitArray[8].bits:  0b00100001000  0x108
+ bitArray[9].dir:  0     bitArray[9].bits:  0b00100001000  0x108
+bitArray[10].dir:  1    bitArray[10].bits:  0b00100010000  0x110
+bitArray[11].dir:  0    bitArray[11].bits:  0b00100010000  0x110
+bitArray[12].dir:  0    bitArray[12].bits:  0b00010000001  0x081
+bitArray[13].dir:  1    bitArray[13].bits:  0b00010000001  0x081
+bitArray[14].dir:  0    bitArray[14].bits:  0b00000001001  0x009
+bitArray[15].dir:  1    bitArray[15].bits:  0b00000001001  0x009
+bitArray[16].dir:  0    bitArray[16].bits:  0b00000010001  0x011
+bitArray[17].dir:  1    bitArray[17].bits:  0b00000010001  0x011
+bitArray[18].dir:  0    bitArray[18].bits:  0b00100000001  0x101
+bitArray[19].dir:  1    bitArray[19].bits:  0b00100000001  0x101
+bitArray[20].dir:  0    bitArray[20].bits:  0b00011000000  0x0c0
+bitArray[21].dir:  1    bitArray[21].bits:  0b00011000000  0x0c0
+bitArray[22].dir:  1    bitArray[22].bits:  0b00001001000  0x048
+bitArray[23].dir:  0    bitArray[23].bits:  0b00001001000  0x048
+bitArray[24].dir:  1    bitArray[24].bits:  0b00001010000  0x050
+bitArray[25].dir:  0    bitArray[25].bits:  0b00001010000  0x050
+bitArray[26].dir:  0    bitArray[26].bits:  0b00000000000  0x000
+bitArray[27].dir:  1    bitArray[27].bits:  0b00000000000  0x000
+bitArray[28].dir:  1    bitArray[28].bits:  0b11110101111  0x7af
+
+xmain() result: 0
+
+Thu 20 Jul 05:50:35 UTC 2023
+

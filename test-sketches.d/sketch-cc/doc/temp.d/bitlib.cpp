@@ -143,7 +143,7 @@ int xmain() {
 
 int main() {
     int result = xmain();
-    printf("xmain() result: \n\n", result);
+    printf("xmain() result: %d\n\n", result);
     printf("Thu 20 Jul 05:50:35 UTC 2023\n\n");
     return 0;
 }
