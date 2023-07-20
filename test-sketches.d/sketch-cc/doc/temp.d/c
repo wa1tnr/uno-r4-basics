@@ -1,0 +1,3 @@
+#!/bin/sh
+# gcc ./${1} ; ./a.out
+gcc ./bitlib.cpp ; ./a.out
